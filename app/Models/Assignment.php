@@ -17,4 +17,15 @@ class Assignment extends \Eloquent
     {
         return $this->belongsTo(User::class,'creator_id');
     }
+
+    public function students()
+    {
+        return $this->hasManyThrough(Student::class,AssignmentStudents::class,'assignment_id','id','student_id');
+        //return $this->hasMany(AssignmentStudents::class, 'assignment_id');
+    }
+
+    public function lecture()
+    {
+        return $this->belongsTo(Lecture::class,'lecture_id');
+    }
 }

@@ -11,5 +11,5 @@ namespace app\Models;
 
 class Lecture extends \Eloquent
 {
-    protected $table = 'Lecture';
+    protected $table = 'lecture';
 }

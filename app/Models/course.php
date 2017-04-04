@@ -6,11 +6,24 @@
  * Time: 19:08
  */
 
-namespace app\Models;
+namespace App\Models;
 
 
-class course extends \Eloquent
+class Course extends \Eloquent
 {
-
     protected $table = 'course';
+
+    /*
+     * Relationships
+     */
+
+    /**
+     * Lectures: One-To-Many
+     *
+     * @return mixed
+     */
+    public function lectures()
+    {
+        return $this->hasMany(Lecture::class,'course_id');
+    }
 }

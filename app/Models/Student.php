@@ -6,10 +6,18 @@
  * Time: 23:14
  */
 
-namespace app\Models;
+namespace App\Models;
 
 
 class Student extends \Eloquent
 {
     protected $table = 'student';
+
+    public function creator() {
+        return $this->belongsTo(User::class,'creator_user_id');
+    }
+
+    public function user() {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }
