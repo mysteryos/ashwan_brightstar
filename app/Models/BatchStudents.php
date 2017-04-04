@@ -1,17 +1,15 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: Shift
- * Date: 4/2/2017
- * Time: 12:32 PM
+ * User: user
+ * Date: 03/04/2017
+ * Time: 07:21
  */
 
-namespace App\Models;
+namespace app\Models;
 
 
 class BatchStudents extends \Eloquent
 {
     protected $table = 'batch_students';
-
-
 }

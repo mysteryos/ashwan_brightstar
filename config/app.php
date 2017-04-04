@@ -146,7 +146,10 @@ return [
         App\Providers\RouteServiceProvider::class,
 
         //Sentinel
-        Cartalyst\Sentinel\Laravel\SentinelServiceProvider::class
+        Cartalyst\Sentinel\Laravel\SentinelServiceProvider::class,
+
+        //Codesleeve stapler
+        Codesleeve\LaravelStapler\Providers\L5ServiceProvider::class
     ],
 
     /*
