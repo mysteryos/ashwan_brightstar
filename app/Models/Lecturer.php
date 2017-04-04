@@ -6,7 +6,7 @@
  * Time: 23:08
  */
 
-namespace app\Models;
+namespace App\Models;
 
 
 class Lecturer extends \Eloquent

@@ -16,7 +16,7 @@ Route::get('/', function () {
 });
 
 Route::get('/test', function() {
-    die(var_dump(\App\Models\Assignments::all()->toArray()));
+    die(\App\Models\Course::with('lectures')->get()->toJson());
 });
 
 

@@ -6,7 +6,7 @@
  * Time: 19:26
  */
 
-namespace app\Models;
+namespace App\Models;
 
 
 class CourseBatchs extends \Eloquent

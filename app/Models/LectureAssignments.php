@@ -6,7 +6,7 @@
  * Time: 23:04
  */
 
-namespace app\Models;
+namespace App\Models;
 
 
 class LectureAssignments extends \Eloquent

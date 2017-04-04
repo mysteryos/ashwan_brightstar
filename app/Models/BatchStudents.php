@@ -6,7 +6,7 @@
  * Time: 07:21
  */
 
-namespace app\Models;
+namespace App\Models;
 
 
 class BatchStudents extends \Eloquent
