@@ -12,4 +12,14 @@ namespace App\Models;
 class CourseBatchs extends \Eloquent
 {
     protected $table = 'course_batchs';
+
+    public function creator() {
+        return $this->belongsTo(User::class,'creator_user_id');
+    }
+
+    public function batch() {
+        return $this->belongsTo(Batch::class,'batch_id');
+    }
+
+
 }

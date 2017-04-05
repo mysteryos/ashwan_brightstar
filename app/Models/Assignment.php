@@ -15,7 +15,8 @@ class Assignment extends \Eloquent
 
     public function creator()
     {
-        return $this->belongsTo(User::class,'creator_id');
+        return $this->belongsTo(User::class,'creator_user_
+        id');
     }
 
     public function students()
@@ -28,4 +29,12 @@ class Assignment extends \Eloquent
     {
         return $this->belongsTo(Lecture::class,'lecture_id');
     }
+
+    public function lecture_assignments()
+    {
+        return $this->belongsTo(LectureAssignments::class,'id');
+    }
+
+
+
 }

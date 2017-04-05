@@ -12,4 +12,16 @@ namespace app\Models;
 class Lecture extends \Eloquent
 {
     protected $table = 'lecture';
+
+
+    public function course()
+    {
+        return $this->hasMany(Course::class, 'course_id');
+    }
+
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'creator_user_id');
+    }
+
 }
