@@ -15,7 +15,7 @@ Route::get('/', 'IndexController@getIndex');
 
 
 Route::get('/test', function() {
-    die(\App\Models\Course::with('lectures')->get()->toJson());
+    die(var_dump(\App\Models\Lecture::all()->toArray()));
 });
 
 /*

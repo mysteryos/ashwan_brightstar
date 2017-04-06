@@ -24,6 +24,11 @@ class Course extends \Eloquent
      */
     public function lectures()
     {
-        return $this->hasMany(Lecture::class,'course_id');
+        return $this->hasMany(Lecture::class, 'lecture_id');
+    }
+
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'creator_user_id');
     }
 }
