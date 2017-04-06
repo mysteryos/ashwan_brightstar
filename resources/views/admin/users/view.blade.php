@@ -8,8 +8,6 @@
             <ul class="tab-nav tn-justified">
                 <li class="active waves-effect"><a href="{{action('Admin\UsersController@getView',['user_id'=>$user->id])}}">About</a></li>
                 <li class="waves-effect"><a href="{{action('Admin\UsersController@getUserPermissions',['user_id'=>$user->id])}}">Roles/Permissions</a></li>
-                <li class="waves-effect"><a href="profile-photos.html">Photos</a></li>
-                <li class="waves-effect"><a href="profile-connections.html">Connections</a></li>
             </ul>
 
             <div class="pmb-block">
