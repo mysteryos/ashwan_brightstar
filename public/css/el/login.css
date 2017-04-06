@@ -1,0 +1,13 @@
+.btn-google:before {
+    width: 16px;
+    height: 17px;
+    background: url("/img/icons/login-sprite.png") no-repeat 0 0;
+    content: '';
+    position: absolute;
+    top: 7px;
+    left: 15px;
+}
+
+.btn-google {
+    padding-left: 16px;
+}

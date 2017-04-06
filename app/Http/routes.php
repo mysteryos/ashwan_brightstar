@@ -11,12 +11,42 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', 'IndexController@getIndex');
+
 
 Route::get('/test', function() {
     die(\App\Models\Course::with('lectures')->get()->toJson());
 });
 
+/*
+ * User Routes
+ */
+Route::get('/login', 'UserController@login');
+
+Route::get('/register', 'UserController@register');
+
+Route::get('/forgot-password', 'UserController@forgotPassword');
+
+Route::get('/logout', 'UserController@logout');
+
+Route::get('/reset-password','UserController@resetPassword');
+
+Route::get('/license-agreement','UserController@licenseAgreement');
+
+/*
+ * RESTFUL Controllers
+ */
+
+Route::controller('user', 'UserController');
+
+/*
+ * Administration Controllers
+ */
+
+Route::group(['namespace'=>'Admin','prefix'=>'admin'], function (){
+    Route::controller('overview','OverviewController');
+    Route::controller('users','UsersController');
+    Route::controller('permissions','PermissionsController');
+    Route::controller('roles','RolesController');
+});
 

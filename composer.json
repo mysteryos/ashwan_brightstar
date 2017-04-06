@@ -8,7 +8,10 @@
         "php": ">=5.5.9",
         "laravel/framework": "5.1.*",
         "cartalyst/sentinel": "2.*",
-        "codesleeve/laravel-stapler": "^1.0"
+        "codesleeve/laravel-stapler": "^1.0",
+        "bjeavons/zxcvbn-php": "^0.1.4",
+        "jenssegers/agent": "^2.3",
+        "watson/rememberable": "^1.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

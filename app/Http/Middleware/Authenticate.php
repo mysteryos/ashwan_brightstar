@@ -3,42 +3,24 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use Illuminate\Contracts\Auth\Guard;
+use Sentinel;
 
 class Authenticate
 {
     /**
-     * The Guard implementation.
-     *
-     * @var Guard
-     */
-    protected $auth;
-
-    /**
-     * Create a new middleware instance.
-     *
-     * @param  Guard  $auth
-     * @return void
-     */
-    public function __construct(Guard $auth)
-    {
-        $this->auth = $auth;
-    }
-
-    /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
+     * @param  \Illuminate\Http\Request $request
+     * @param  \Closure $next
      * @return mixed
      */
     public function handle($request, Closure $next)
     {
-        if ($this->auth->guest()) {
+        if (Sentinel::check() === false) {
             if ($request->ajax()) {
-                return response('Unauthorized.', 401);
+                return response('Please login to access this resource.', 401);
             } else {
-                return redirect()->guest('auth/login');
+                return redirect()->guest('/login')->withErrors('Please login to access this resource.');
             }
         }
 

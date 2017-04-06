@@ -1,0 +1,7 @@
+.active-balance-link {
+    text-decoration: underline;
+}
+
+.active-balance-link:hover {
+    color: black;
+}
