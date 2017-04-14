@@ -39,6 +39,11 @@ Route::get('/license-agreement','UserController@licenseAgreement');
 
 Route::controller('user', 'UserController');
 
+//Student Route
+Route::controller('student', 'StudentController');
+
+//Lecturer Route
+
 /*
  * Administration Controllers
  */
