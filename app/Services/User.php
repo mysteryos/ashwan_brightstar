@@ -476,22 +476,4 @@ class User extends Service
         return $user;
     }
 
-    /**
-     * Filter out gmail emails
-     *
-     * @param $email
-     * @return bool
-     */
-    public function validateGoogleEmail($email) {
-        if(filter_var($email,FILTER_VALIDATE_EMAIL)) {
-            $explodedEmail = explode('@', $email);
-            $domain = array_pop($explodedEmail);
-            if($domain !== 'gmail') {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
 }
