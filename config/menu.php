@@ -36,15 +36,15 @@ return [
                 'name' => 'List',
                 'icon' => 'zmdi zmdi-view-list',
                 'permission' => 'students.list.view',
-                'href' => '/students/list',
-                'inurl' => '/students/list'
+                'href' => '/student/list',
+                'inurl' => '/student/list'
             ],
             'create' => [
                 'name' => 'Create',
                 'icon' => 'zmdi zmdi-plus',
                 'permission' => 'students.create',
-                'href' => '/students/create',
-                'inurl' => '/students/create'
+                'href' => '/student/create',
+                'inurl' => '/student/create'
             ],
         ]
     ],
