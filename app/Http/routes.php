@@ -15,7 +15,7 @@ Route::get('/', 'IndexController@getIndex');
 
 
 Route::get('/test', function() {
-    die(var_dump(\App\Models\Lecture::all()->toArray()));
+    die(var_dump(\App\Models\Lecturer::all()->toArray()));
 });
 
 /*

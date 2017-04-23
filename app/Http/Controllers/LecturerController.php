@@ -30,20 +30,20 @@ class LecturerController extends Controller
     public function getList()
     {
         //Set Page Title
-        $this->data['pageTitle'] = 'Student - List';
+        $this->data['pageTitle'] = 'Lecturer - List';
 
         //Set Data
-        $this->data['student_list'] = \App\Models\Student::orderBy('updated_at','DESC')->get();
+        $this->data['lecturer_list'] = \App\Models\Lecturer::orderBy('updated_at','DESC')->get();
 
         //Permissions
-        $this->data['can_create_student'] = true;
+        $this->data['can_create_lecturer'] = true;
 
         //Assets
         $this->addjQueryBootgrid();
-        $this->addJs('/js/el/student.list.js');
-        $this->addCss('/css/el/student.list.css');
+        $this->addJs('/js/el/lecturer.list.js');
+        $this->addCss('/css/el/lecturer.list.css');
 
-        return $this->renderView('student.list');
+        return $this->renderView('lecturer.list');
     }
 
     public function getCreate()

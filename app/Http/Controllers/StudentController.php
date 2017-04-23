@@ -1,12 +1,12 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: Shift
- * Date: 4/14/2017
- * Time: 3:33 PM
+ * User: user
+ * Date: 20/04/2017
+ * Time: 09:17
  */
 
-namespace App\Http\Controllers;
+namespace app\Http\Controllers;
 
 use App\Traits\VendorLibraries;
 use Illuminate\Http\Request;
@@ -17,6 +17,8 @@ class StudentController extends Controller
     /**
      * Construct
      */
+
+
     public function __construct()
     {
         parent::__construct();
@@ -50,4 +52,8 @@ class StudentController extends Controller
     {
 
     }
+
+
+
+
 }
