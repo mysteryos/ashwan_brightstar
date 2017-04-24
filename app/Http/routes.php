@@ -43,6 +43,7 @@ Route::controller('user', 'UserController');
 Route::controller('student', 'StudentController');
 
 //Lecturer Route
+Route::controller('lecturer', 'LecturerController');
 
 /*
  * Administration Controllers

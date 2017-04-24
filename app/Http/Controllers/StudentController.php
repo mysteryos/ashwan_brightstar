@@ -6,7 +6,7 @@
  * Time: 09:17
  */
 
-namespace app\Http\Controllers;
+namespace App\Http\Controllers;
 
 use App\Traits\VendorLibraries;
 use Illuminate\Http\Request;
