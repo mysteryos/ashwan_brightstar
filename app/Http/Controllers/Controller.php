@@ -15,6 +15,8 @@ use Session;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\MessageBag;
 use Jenssegers\Agent\Agent;
+use App\Exceptions\HttpExceptionWithError;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class Controller
@@ -250,6 +252,22 @@ abstract class Controller extends BaseController
             throw new HttpException(403,"You do not have access to this resource");
         }
 
+    }
+
+    /**
+     * Validates data through Laravel's Validator
+     *
+     * @param array $data
+     * @param array $rules
+     * @throws HttpExceptionWithError
+     */
+    protected function validateData(array $data, array $rules)
+    {
+        $validator = app('Illuminate\Contracts\Validation\Factory')->make($data,$rules);
+        if(!$validator->passes())
+        {
+            throw new HttpExceptionWithError(Response::HTTP_BAD_REQUEST, $validator->errors());
+        }
     }
 
 }

@@ -35,7 +35,7 @@ class AssignmentController extends Controller
         $this->data['pageTitle'] = 'Assignment - List';
 
         //Set Data
-        $this->data['assignment_list'] = \App\Models\Assignment::orderBy('updated_at','DESC')->get();
+        $this->data['assignment_list'] = \App\Models\Assignment::with('lecture')->orderBy('updated_at','DESC')->get();
 
         //Permissions
         $this->data['can_create_assignment'] = true;

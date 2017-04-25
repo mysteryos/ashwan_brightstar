@@ -23,7 +23,7 @@
                         <th data-column-id="id" data-type="numeric">ID</th>
                         <th data-column-id="name" >Name</th>
                         <th data-column-id="description">Description</th>
-                        <th data-column-id="lecture_id" >Lecture ID</th>
+                        <th data-column-id="lecture_id" >Lecture</th>
                         <th data-column-id="submission_date">Submission Date</th>
 
 
@@ -40,10 +40,8 @@
                         <td>{{$assignment_row->id}}</td>
                         <td>{{$assignment_row->name}}</td>
                         <td>{{$assignment_row->description}}</td>
-                        <td>{{$assignment_row->lecture_id}}</td>
+                        <td>@if($assignment_row->lecture){{$assignment_row->lecture->name}}@else{{('N/A')}}@endif</td>
                         <td>{{$assignment_row->submission_date}}</td>
-
-
                         @if($isSuperAdmin)
                             <td>{{$assignment_row->created_at}}</td>
                             <td>{{$assignment_row->updated_at}}</td>
