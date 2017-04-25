@@ -15,7 +15,7 @@ Route::get('/', 'IndexController@getIndex');
 
 
 Route::get('/test', function() {
-    die(var_dump(\App\Models\Lecturer::all()->toArray()));
+    die(var_dump(\App\Models\Assignment::all()->toArray()));
 });
 
 /*
@@ -44,6 +44,19 @@ Route::controller('student', 'StudentController');
 
 //Lecturer Route
 Route::controller('lecturer', 'LecturerController');
+
+//Lecture Route
+Route::controller('lecture', 'LectureController');
+
+//Batch Route
+Route::controller('batch', 'BatchController');
+
+//Course Route
+Route::controller('course', 'CourseController');
+
+//Assignment Route
+Route::controller('assignment', 'AssignmentController');
+
 
 /*
  * Administration Controllers
