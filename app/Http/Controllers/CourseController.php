@@ -16,6 +16,8 @@ class CourseController extends Controller
 {
     use VendorLibraries;
 
+    protected $policy = '\App\Policies\Controllers\CourseControllerPolicy';
+
     /**
      * Construct
      */
@@ -50,9 +52,41 @@ class CourseController extends Controller
 
     public function getCreate()
     {
+        //Set Page Title
+        $this->data['pageTitle'] = 'Course - Create';
+
+        //Permissions
+        $this->data['can_create_course'] = true;
+
+        //Assets
+        $this->addJqueryValidate();
+
+        $this->addJs('/js/el/course.create.js');
+        return $this->renderView('course.create');
+
 
     }
+    public function postCreate(Request $request)
+    {
 
+
+        //Validate Data from request
+        $this->validateData($request->all(),[
+            'name' => 'required|max:255',
+            'duration_month' => 'required|max:12',
+            'description' => 'description|max:254',
+
+        ]);
+
+        //Create New Course
+        $course = new \App\Models\Course();
+        //Fill in information from request
+        $course->fill($request->all());
+        //Set creator user id to user currently logged in
+        $course->creator_user_id = $this->user->id;
+        //Save to database
+        $course->save();
+    }
 
 
 

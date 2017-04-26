@@ -13,6 +13,18 @@ class Lecturer extends \Eloquent
 {
     protected $table = 'lecturer';
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'first_name',
+        'last_name',
+        'email',
+        'mobile_number',
+        'address'
+    ];
 
 
     public function user()

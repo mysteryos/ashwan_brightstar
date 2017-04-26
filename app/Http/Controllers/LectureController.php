@@ -16,6 +16,10 @@ class LectureController extends Controller
 {
     use VendorLibraries;
 
+    protected $policy = '\App\Policies\Controllers\LectureControllerPolicy';
+
+
+
     /**
      * Construct
      */
@@ -51,6 +55,40 @@ class LectureController extends Controller
     public function getCreate()
     {
 
+        //Set Page Title
+        $this->data['pageTitle'] = 'Lecture - Create';
+
+        //Permissions
+        $this->data['can_create_lecture'] = true;
+
+        //Assets
+        $this->addJqueryValidate();
+
+        $this->addJs('/js/el/lecture.create.js');
+        return $this->renderView('lecture.create');
+
+    }
+
+
+    public function postCreate(Request $request)
+    {
+
+
+        //Validate Data from request
+        $this->validateData($request->all(),[
+            'name' => 'required|max:255',
+            'description' => 'required|max:255',
+
+        ]);
+
+        //Create New Lecture
+        $lecture = new \App\Models\Lecture();
+        //Fill in information from request
+        $lecture->fill($request->all());
+        //Set creator user id to user currently logged in
+        $lecture->creator_user_id = $this->user->id;
+        //Save to database
+        $lecture->save();
     }
 
 

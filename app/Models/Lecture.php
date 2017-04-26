@@ -14,6 +14,20 @@ class Lecture extends \Eloquent
     protected $table = 'lecture';
 
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'name',
+        'description',
+
+    ];
+
+
+
+
     public function course()
     {
         return $this->hasMany(Course::class, 'course_id');

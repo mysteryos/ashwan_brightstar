@@ -1,4 +1,6 @@
-
+/**
+ * Created by user on 26/04/2017.
+ */
 
 $(function(){
     $.validator.setDefaults({
@@ -17,24 +19,20 @@ $(function(){
     });
 
     //Validate
-    $('#student_create_form').validate({
+    $('#course_create_form').validate({
         rules: {
-            first_name: {
+            name: {
                 required: true,
                 maxlength: 255
             },
-            last_name: {
+            description: {
                 required: true,
                 maxlength: 255
             },
-            email: {
-                email: true,
-                maxlength: 254
-            },
-            mobile_number: {
-                digits: true,
-                minlength: 4,
-                maxlength: 15
+            duration_months: {
+                required: true,
+                maxlength: 12
+
             },
         },
         messages: {
@@ -59,3 +57,5 @@ $(function(){
         }
     });
 });
+
+

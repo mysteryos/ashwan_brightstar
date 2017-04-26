@@ -1,4 +1,6 @@
-
+/**
+ * Created by user on 25/04/2017.
+ */
 
 $(function(){
     $.validator.setDefaults({
@@ -17,7 +19,7 @@ $(function(){
     });
 
     //Validate
-    $('#student_create_form').validate({
+    $('#lecturer_create_form').validate({
         rules: {
             first_name: {
                 required: true,

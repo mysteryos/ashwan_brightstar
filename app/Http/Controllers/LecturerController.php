@@ -14,6 +14,8 @@ class LecturerController extends Controller
 {
     use VendorLibraries;
 
+    protected $policy = '\App\Policies\Controllers\LecturerControllerPolicy';
+
     /**
      * Construct
      */
@@ -48,6 +50,49 @@ class LecturerController extends Controller
 
     public function getCreate()
     {
+        //Verify User Access
+        $this->verifyAccess();
+
+        //Set Page Title
+        $this->data['pageTitle'] = 'Lecturer - Create';
+
+        //Permissions
+        $this->data['can_create_lecturer'] = true;
+
+        //Assets
+        $this->addJqueryValidate();
+
+        $this->addJs('/js/el/lecturer.create.js');
+        return $this->renderView('lecturer.create');
+
 
     }
+
+    public function postCreate(Request $request)
+    {
+        //Verify User Access
+        $this->verifyAccess();
+
+        //Validate Data from request
+        $this->validateData($request->all(),[
+            'first_name' => 'required|max:255',
+            'last_name' => 'required|max:255',
+            'email' => 'email|max:254',
+            'mobile_number' => 'numeric|digits_between:4,15'
+        ]);
+
+        //Create New Lecturer
+        $lecturer = new \App\Models\Lecturer();
+        //Fill in information from request
+        $lecturer->fill($request->all());
+        //Set creator user id to user currently logged in
+        $lecturer->creator_user_id = $this->user->id;
+        //Save to database
+        $lecturer->save();
+    }
+
+
+    
+
+
 }

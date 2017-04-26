@@ -13,6 +13,25 @@ class Assignment extends \Eloquent
 {
     protected $table = 'assignment';
 
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'name',
+        'description',
+        'submission_date'
+
+    ];
+
+
+
+
+
+
+
     public function creator()
     {
         return $this->belongsTo(User::class,'creator_user_

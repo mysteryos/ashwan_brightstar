@@ -16,6 +16,9 @@ class BatchController extends Controller
 {
     use VendorLibraries;
 
+    protected $policy = '\App\Policies\Controllers\BatchControllerPolicy';
+
+
     /**
      * Construct
      */
@@ -50,6 +53,43 @@ class BatchController extends Controller
 
     public function getCreate()
     {
+
+
+
+        //Set Page Title
+        $this->data['pageTitle'] = 'Batch - Create';
+
+        //Permissions
+        $this->data['can_create_batch'] = true;
+
+        //Assets
+        $this->addJqueryValidate();
+
+        $this->addJs('/js/el/batch.create.js');
+        return $this->renderView('batch.create');
+
+
+    }
+
+    public function postCreate(Request $request)
+    {
+        //Validate Data from request
+        $this->validateData($request->all(),[
+            'name' => 'required|max:255',
+            'start_date' => 'required',
+
+        ]);
+
+        //Create New Batch
+        $batch = new \App\Models\Batch();
+        //Fill in information from request
+        $batch->fill($request->all());
+        //Set creator user id to user currently logged in
+        $batch->creator_user_id = $this->user->id;
+        //Save to database
+        $batch->save();
+
+
 
     }
 

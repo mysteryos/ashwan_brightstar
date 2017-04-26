@@ -13,6 +13,21 @@ class Course extends \Eloquent
 {
     protected $table = 'course';
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'name',
+        'duration_months',
+        'description'];
+
+
+
+
+
+
     /*
      * Relationships
      */

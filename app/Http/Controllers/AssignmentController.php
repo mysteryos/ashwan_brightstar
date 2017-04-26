@@ -16,6 +16,8 @@ class AssignmentController extends Controller
 {
     use VendorLibraries;
 
+    protected $policy = '\App\Policies\Controllers\AssignmentControllerPolicy';
+
     /**
      * Construct
      */
@@ -51,10 +53,43 @@ class AssignmentController extends Controller
     public function getCreate()
     {
 
+        //Set Page Title
+        $this->data['pageTitle'] = 'Assignment- Create';
+
+        //Permissions
+        $this->data['can_create_assignment'] = true;
+
+        //Assets
+        $this->addJqueryValidate();
+
+        $this->addJs('/js/el/assignment.create.js');
+        return $this->renderView('assignment.create');
+
+
     }
 
 
+    public function postCreate(Request $request)
+    {
 
+
+        //Validate Data from request
+        $this->validateData($request->all(),[
+            'name' => 'required|max:255',
+            'description' => 'required|max:255',
+            'submission_date' => 'email|max:254',
+
+        ]);
+
+        //Create New Assignment
+        $assignment = new \App\Models\Assignment();
+        //Fill in information from request
+        $assignment->fill($request->all());
+        //Set creator user id to user currently logged in
+        $assignment->creator_user_id = $this->user->id;
+        //Save to database
+        $assignment->save();
+    }
 
 
 }

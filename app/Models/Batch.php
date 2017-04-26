@@ -13,6 +13,19 @@ class Batch extends \Eloquent
 {
     protected $table = 'batch';
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'name',
+        'start_date',
+
+    ];
+
+
+
 
     public function lecturer()
     {

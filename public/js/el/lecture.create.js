@@ -1,3 +1,6 @@
+/**
+ * Created by user on 26/04/2017.
+ */
 
 
 $(function(){
@@ -17,24 +20,15 @@ $(function(){
     });
 
     //Validate
-    $('#student_create_form').validate({
+    $('#lecture_create_form').validate({
         rules: {
-            first_name: {
+            name: {
                 required: true,
                 maxlength: 255
             },
-            last_name: {
+            description: {
                 required: true,
                 maxlength: 255
-            },
-            email: {
-                email: true,
-                maxlength: 254
-            },
-            mobile_number: {
-                digits: true,
-                minlength: 4,
-                maxlength: 15
             },
         },
         messages: {
@@ -59,3 +53,4 @@ $(function(){
         }
     });
 });
+
