@@ -1,14 +1,14 @@
-/**
- * Created by user on 25/04/2017.
- */
+
 
 $(function(){
     $.validator.setDefaults({
+        //for Chosen selects
+        ignore: ":hidden:not(select)",
         highlight: function (element) {
-            $(element).closest('.form-group').addClass('has-error');
+            $(element).parents('.dl-horizontal').addClass('has-error');
         },
         unhighlight: function (element) {
-            $(element).closest('.form-group').removeClass('has-error');
+            $(element).parents('.dl-horizontal').removeClass('has-error');
         },
         errorElement: 'small',
         errorClass: 'help-block',
@@ -19,7 +19,7 @@ $(function(){
     });
 
     //Validate
-    $('#batch_create_form').validate({
+    $('#batch_basic_info_form').validate({
         rules: {
             name: {
                 required: true,
@@ -34,9 +34,8 @@ $(function(){
             lecturer_id: {
                 required: true
             }
-        }}
-
-    );
+        }
+    });
 
     $('#inputStartDate').datetimepicker({
         format: 'YYYY-MM-DD',
@@ -60,10 +59,3 @@ $(function(){
         ]
     });
 });
-
-
-
-
-
-
-

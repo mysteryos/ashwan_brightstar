@@ -21,15 +21,15 @@ class Batch extends \Eloquent
     protected $fillable = [
         'name',
         'start_date',
-
+        'course_id',
+        'lecturer_id'
     ];
 
-
-
+    protected $dates = ['start_date'];
 
     public function lecturer()
     {
-        return $this->hasMany(Lecturer::class, 'lecturer_id');
+        return $this->belongsTo(Lecturer::class, 'lecturer_id');
     }
 
     public function creator()

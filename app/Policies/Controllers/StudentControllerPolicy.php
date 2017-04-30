@@ -20,4 +20,14 @@ class StudentControllerPolicy extends BaseControllerPolicy
     {
         return $this->user->hasAccess('student.create');
     }
+
+    protected function postUpdate()
+    {
+        return $this->user->hasAccess('student.update');
+    }
+
+    protected function getView($student_id)
+    {
+        return true;
+    }
 }
