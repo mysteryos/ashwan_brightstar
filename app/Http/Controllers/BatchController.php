@@ -54,16 +54,22 @@ class BatchController extends Controller
     public function getCreate()
     {
 
-
-
         //Set Page Title
         $this->data['pageTitle'] = 'Batch - Create';
 
         //Permissions
         $this->data['can_create_batch'] = true;
 
+        //Course List
+        $this->data['course_list'] =  \App\Models\Course::orderBy('name','ASC')->get();
+
+        //Lecturer List
+        $this->data['lecturer_list'] =  \App\Models\Lecturer::orderBy('last_name','ASC')->orderBy('first_name','ASC')->get();
+
         //Assets
         $this->addJqueryValidate();
+        $this->addMoment();
+        $this->addBootstrapDatetimePicker();
 
         $this->addJs('/js/el/batch.create.js');
         return $this->renderView('batch.create');
@@ -76,8 +82,9 @@ class BatchController extends Controller
         //Validate Data from request
         $this->validateData($request->all(),[
             'name' => 'required|max:255',
-            'start_date' => 'required',
-
+            'start_date' => 'required|date_format:Y-m-d',
+            'course_id' => 'required|exists:course,id',
+            'lecturer_id' => 'required|exists:lecturer,id'
         ]);
 
         //Create New Batch
@@ -86,6 +93,12 @@ class BatchController extends Controller
         $batch->fill($request->all());
         //Set creator user id to user currently logged in
         $batch->creator_user_id = $this->user->id;
+
+        //Set Lecture Id
+        $batch->lecturer_id = $request->get('lecturer_id');
+
+        //Set Course Id
+        $batch->course_id = $request->get('course_id');
         //Save to database
         $batch->save();
 

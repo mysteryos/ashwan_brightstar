@@ -23,19 +23,11 @@ class Assignment extends \Eloquent
         'name',
         'description',
         'submission_date'
-
     ];
-
-
-
-
-
-
 
     public function creator()
     {
-        return $this->belongsTo(User::class,'creator_user_
-        id');
+        return $this->belongsTo(User::class,'creator_user_id');
     }
 
     public function students()

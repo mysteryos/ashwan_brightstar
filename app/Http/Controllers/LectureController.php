@@ -61,6 +61,9 @@ class LectureController extends Controller
         //Permissions
         $this->data['can_create_lecture'] = true;
 
+        //Course List
+        $this->data['course_list'] = \App\Models\Course::orderBy('name','ASC')->get();
+
         //Assets
         $this->addJqueryValidate();
 
@@ -72,13 +75,11 @@ class LectureController extends Controller
 
     public function postCreate(Request $request)
     {
-
-
         //Validate Data from request
         $this->validateData($request->all(),[
             'name' => 'required|max:255',
             'description' => 'required|max:255',
-
+            'course_id' => 'required|exists:course,id'
         ]);
 
         //Create New Lecture
@@ -87,6 +88,8 @@ class LectureController extends Controller
         $lecture->fill($request->all());
         //Set creator user id to user currently logged in
         $lecture->creator_user_id = $this->user->id;
+        //Course
+        $lecture->course_id = $request->get('course_id');
         //Save to database
         $lecture->save();
     }

@@ -24,6 +24,21 @@
                     </div>
                 </div>
 
+                <div class="form-group">
+                    <label class="col-sm-2 control-label" for="inputCourseId">Course*</label>
+                    <div class="col-sm-10">
+                        <div class="fg-line">
+                            <div class="select">
+                                <select name="course_id" class="form-control" id="inputCourseId">
+                                    <option disabled @if(!old('course_id',null)){{"selected"}}@endif>Select a course</option>
+                                    @foreach($course_list as $course_row)
+                                        <option value="{{$course_row->id}}" @if(old('course_id') === $course_row->id){{"selected"}}@endif>{{$course_row->name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>                
 
                 <div class="form-group">
                     <div class="col-sm-offset-2 col-sm-10">

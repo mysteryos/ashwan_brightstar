@@ -2,7 +2,7 @@
  * Created by user on 26/04/2017.
  */
 
-(function(){
+$(function(){
     $.validator.setDefaults({
         highlight: function (element) {
             $(element).closest('.form-group').addClass('has-error');
@@ -18,6 +18,28 @@
         }
     });
 
+    $('#inputSubmissionDate').datetimepicker({
+        format: 'YYYY-MM-DD',
+        useCurrent: false,
+        disabledDates: [
+            moment('2017-01-01'),
+            moment('2017-01-02'),
+            moment('2017-01-28'),
+            moment('2017-02-01'),
+            moment('2017-02-09'),
+            moment('2017-02-24'),
+            moment('2017-03-12'),
+            moment('2017-03-29'),
+            moment('2017-05-01'),
+            moment('2017-06-26'),
+            moment('2017-08-26'),
+            moment('2017-10-19'),
+            moment('2017-11-01'),
+            moment('2017-11-02'),
+            moment('2017-12-25')
+        ]
+    });
+
     //Validate
     $('#assignment_create_form').validate({
         rules: {
@@ -26,38 +48,16 @@
                 maxlength: 255
             },
             description: {
-                required: true,
-                maxlength: 255
-
-
+                required: true
             },
             submission_date: {
                 required: true,
-
-
             },
-            messages: {
-                gender_id: {
-                    required: "Please select a gender"
-                },
-                'job[category_id]': {
-                    required: "Please select an employee category"
-                },
-                'job[department_id]': {
-                    required: "Please select the employee's department"
-                },
-                'job[title]': {
-                    required: "Please enter the employee's title"
-                },
-                'job[start_date]': {
-                    required: "Please enter the employee's job start date"
-                },
-                'job[end_date]': {
-                    greaterThan: "End date must be greater or equal to start date"
-                }
+            lecture_id: {
+                required: true
             }
-        }}
 
-    );
+    }});
+
 });
 

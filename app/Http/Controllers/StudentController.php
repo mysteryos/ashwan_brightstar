@@ -75,8 +75,8 @@ class StudentController extends Controller
 
         //Validate Data from request
         $this->validateData($request->all(),[
-            'first_name' => 'required|max:255',
-            'last_name' => 'required|max:255',
+            'first_name' => 'required|max:255|alpha',
+            'last_name' => 'required|max:255|alpha',
             'email' => 'email|max:254',
             'mobile_number' => 'numeric|digits_between:4,15'
         ]);

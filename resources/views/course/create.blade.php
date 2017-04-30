@@ -27,10 +27,10 @@
 
 
                 <div class="form-group">
-                    <label class="col-sm-2 control-label" for="inputDurationMonths">Duration_months*</label>
+                    <label class="col-sm-2 control-label" for="inputDurationMonths">Duration*</label>
                     <div class="col-sm-10">
                         <div class="fg-line">
-                            <input name="duration_months" type="text" placeholder="Duration_months" id="inputDurationmonths" class="form-control input-sm" value="{{old('duration_months')}}">
+                            <input name="duration_months" type="text" placeholder="Duration(In Months)" id="inputDurationMonths" class="form-control input-sm" value="{{old('duration_months')}}">
                         </div>
                     </div>
                 </div>

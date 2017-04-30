@@ -59,12 +59,15 @@ class AssignmentController extends Controller
         //Permissions
         $this->data['can_create_assignment'] = true;
 
+        //Lecturer List
+        $this->data['lecture_list'] = \App\Models\Lecture::orderBy('name','ASC')->get();
         //Assets
         $this->addJqueryValidate();
+        $this->addMoment();
+        $this->addBootstrapDatetimePicker();
 
         $this->addJs('/js/el/assignment.create.js');
         return $this->renderView('assignment.create');
-
 
     }
 
@@ -72,13 +75,12 @@ class AssignmentController extends Controller
     public function postCreate(Request $request)
     {
 
-
         //Validate Data from request
         $this->validateData($request->all(),[
             'name' => 'required|max:255',
             'description' => 'required|max:255',
-            'submission_date' => 'email|max:254',
-
+            'submission_date' => 'required|date_format:Y-m-d|after:tomorrow',
+            'lecture_id' => 'required|exists:lecture,id'
         ]);
 
         //Create New Assignment
@@ -87,6 +89,10 @@ class AssignmentController extends Controller
         $assignment->fill($request->all());
         //Set creator user id to user currently logged in
         $assignment->creator_user_id = $this->user->id;
+
+        //Set Lecture
+        $assignment->lecture_id = $request->get('lecture_id');
+
         //Save to database
         $assignment->save();
     }

@@ -26,6 +26,28 @@ class Lecturer extends \Eloquent
         'address'
     ];
 
+    /**
+     * Additional attributes available on model
+     *
+     * @var array
+     */
+    protected $appends = ['name'];
+
+
+    /**
+     * ACCESSOR: Name
+     *
+     * @return string
+     */
+    public function getNameAttribute()
+    {
+        return "{$this->last_name} {$this->first_name}";
+    }
+
+    /**
+     * Relationships
+     *
+     */
 
     public function user()
     {

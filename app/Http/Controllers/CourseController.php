@@ -69,13 +69,11 @@ class CourseController extends Controller
     public function postCreate(Request $request)
     {
 
-
         //Validate Data from request
         $this->validateData($request->all(),[
             'name' => 'required|max:255',
-            'duration_month' => 'required|max:12',
-            'description' => 'description|max:254',
-
+            'duration_months' => 'required|numeric|max:12|min:1',
+            'description' => 'required',
         ]);
 
         //Create New Course

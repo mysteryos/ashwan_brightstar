@@ -6,7 +6,7 @@
  * Time: 18:48
  */
 
-namespace app\Policies\Controllers;
+namespace App\Policies\Controllers;
 
 
 class LecturerControllerPolicy extends BaseControllerPolicy
