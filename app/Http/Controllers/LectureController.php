@@ -54,6 +54,9 @@ class LectureController extends Controller
 
     public function getCreate()
     {
+        //Verify User Access
+        $this->verifyAccess();
+
 
         //Set Page Title
         $this->data['pageTitle'] = 'Lecture - Create';
@@ -72,6 +75,8 @@ class LectureController extends Controller
 
     public function postCreate(Request $request)
     {
+        //Verify User Access
+        $this->verifyAccess();
 
 
         //Validate Data from request

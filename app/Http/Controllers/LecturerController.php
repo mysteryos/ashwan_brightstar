@@ -92,7 +92,7 @@ class LecturerController extends Controller
     }
 
 
-    
+
 
 
 }
