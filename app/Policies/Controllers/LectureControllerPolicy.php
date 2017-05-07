@@ -6,7 +6,7 @@
  * Time: 18:48
  */
 
-namespace app\Policies\Controllers;
+namespace App\Policies\Controllers;
 
 
 class LectureControllerPolicy extends BaseControllerPolicy
@@ -20,6 +20,14 @@ class LectureControllerPolicy extends BaseControllerPolicy
     {
         return $this->user->hasAccess('lecture.create');
     }
+    protected function postUpdate()
+    {
+        return $this->user->hasAccess('lecture.update');
+    }
 
+    protected function getView($lecture_id)
+    {
+        return true;
+    }
 }
 

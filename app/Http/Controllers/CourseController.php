@@ -37,7 +37,7 @@ class CourseController extends Controller
         $this->data['pageTitle'] = 'Course - List';
 
         //Set Data
-        $this->data['course_list'] = \App\Models\Course::orderBy('updated_at','DESC')->get();
+        $this->data['course_list'] = \App\Models\Course::orderBy('updated_at', 'DESC')->get();
 
         //Permissions
         $this->data['can_create_course'] = true;
@@ -70,31 +70,9 @@ class CourseController extends Controller
 
 
     }
+
     public function postCreate(Request $request)
     {
 
-        //Verify User Access
-        $this->verifyAccess();
-
-
-        //Validate Data from request
-        $this->validateData($request->all(),[
-            'name' => 'required|max:255',
-            'duration_month' => 'required|max:12',
-            'description' => 'description|max:254',
-
-        ]);
-
-        //Create New Course
-        $course = new \App\Models\Course();
-        //Fill in information from request
-        $course->fill($request->all());
-        //Set creator user id to user currently logged in
-        $course->creator_user_id = $this->user->id;
-        //Save to database
-        $course->save();
     }
-
-
-
 }

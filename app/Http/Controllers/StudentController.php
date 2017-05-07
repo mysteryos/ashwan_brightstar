@@ -75,8 +75,8 @@ class StudentController extends Controller
 
         //Validate Data from request
         $this->validateData($request->all(),[
-            'first_name' => 'required|max:255',
-            'last_name' => 'required|max:255',
+            'first_name' => 'required|max:255|alpha',
+            'last_name' => 'required|max:255|alpha',
             'email' => 'email|max:254',
             'mobile_number' => 'numeric|digits_between:4,15'
         ]);
@@ -91,8 +91,64 @@ class StudentController extends Controller
         $student->save();
     }
 
+    /**
+     * POST: Update Student Profile
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function postUpdate(Request $request)
+    {
+        //Verify User Access
+        $this->verifyAccess();
 
+        //Validate Data from request
+        $this->validateData($request->all(),[
+            'id' => 'required|exists:student,id',
+            'first_name' => 'required|max:255|alpha',
+            'last_name' => 'required|max:255|alpha',
+            'email' => 'email|max:254',
+            'mobile_number' => 'numeric|digits_between:4,15'
+        ]);
 
+        $student = \App\Models\Student::findOrFail($request->get('id'));
 
+        //Fill in information from request
+        $student->fill($request->all());
+
+        //Save to database
+        $student->save();
+
+        return redirect()->action('StudentController@getView',[$student->id]);
+    }
+
+    /**
+     * GET: View Student Profile
+     *
+     * @param int $student_id
+     * @return \Illuminate\View\View
+     */
+    public function getView($student_id)
+    {
+        $student = \App\Models\Student::findOrFail((int)$student_id);
+
+        //Verify User Access
+        $this->verifyAccess($student_id);
+
+        //Set Page Title
+        $this->data['pageTitle'] = 'Student - View - '.$student->name;
+
+        $this->data['student'] = $student;
+
+        /*
+         * Assets
+         */
+        $this->addJqueryValidate();
+
+        $this->addJs('/js/el/student.view.js');
+        $this->addCss('/css/el/student.view.css');
+
+        return $this->renderView('student.view');
+    }
 
 }

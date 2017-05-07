@@ -1,8 +1,3 @@
-/**
- * Created by user on 26/04/2017.
- */
-
-
 $(function(){
     $.validator.setDefaults({
         highlight: function (element) {
@@ -19,38 +14,33 @@ $(function(){
         }
     });
 
+    $.validator.addMethod("lettersonly", function(value, element) {
+        return this.optional(element) || /^[a-z ]+$/i.test(value);
+    }, "Letters only please");
+
+
     //Validate
     $('#lecture_create_form').validate({
         rules: {
+            id: {
+                required: true,
+                maxlength: 5,
+                digitsonly: true
+            },
             name: {
                 required: true,
-                maxlength: 255
+                maxlength: 255,
+                lettersonly: true
             },
             description: {
+                description: true,
+                maxlength: 254
+            },
+            course_id: {
                 required: true,
-                maxlength: 255
+                maxlength: 5,
+                digitsonly: true
             },
-        },
-        messages: {
-            gender_id: {
-                required: "Please select a gender"
-            },
-            'job[category_id]': {
-                required: "Please select an employee category"
-            },
-            'job[department_id]': {
-                required: "Please select the employee's department"
-            },
-            'job[title]': {
-                required: "Please enter the employee's title"
-            },
-            'job[start_date]': {
-                required: "Please enter the employee's job start date"
-            },
-            'job[end_date]': {
-                greaterThan: "End date must be greater or equal to start date"
-            }
         }
     });
 });
-

@@ -56,7 +56,6 @@ class BatchController extends Controller
         //Verify User Access
         $this->verifyAccess();
 
-
         //Set Page Title
         $this->data['pageTitle'] = 'Batch - Create';
 
@@ -77,27 +76,29 @@ class BatchController extends Controller
         //Verify User Access
         $this->verifyAccess();
 
-
-
         //Validate Data from request
         $this->validateData($request->all(),[
-            'name' => 'required|max:255',
-            'start_date' => 'required',
+            'name' => 'required|max:255|alpha',
+            'start_date' => 'required|date',
 
         ]);
 
         //Create New Batch
-        $batch = new \App\Models\Batch();
+        $lecturer = new \App\Models\Batch();
         //Fill in information from request
-        $batch->fill($request->all());
+        $lecturer->fill($request->all());
         //Set creator user id to user currently logged in
-        $batch->creator_user_id = $this->user->id;
+        $lecturer->creator_user_id = $this->user->id;
         //Save to database
         $batch->save();
-
-
-
     }
 
 
+
+
+
 }
+
+
+
+

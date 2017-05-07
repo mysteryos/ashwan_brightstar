@@ -65,7 +65,7 @@ return [
                 'in url' => '/assignment/list'
             ],
             'create' => [
-                'name' => 'create',
+                'name' => 'Create',
                 'icon' => 'zmdi zmdi-plus',
                 'permission' => 'md-file-plus',
                 'href' => '/assignment/create',
@@ -88,11 +88,11 @@ return [
             'in url' => '/lecturer/list'
         ],
         'create' => [
-            'name' => 'create',
+            'name' => 'Create',
             'icon' => 'zmdi zmdi-plus',
-            'permission' => 'assignment.create',
-            'href' => '/assignment/create',
-            'in url' => '/assignment/create'
+            'permission' => 'lecturer.create',
+            'href' => '/lecturer/create',
+            'in url' => '/lecturer/create'
             ]
         ]
     ],
@@ -110,33 +110,11 @@ return [
                 'in url' => '/lecture/list'
             ],
             'create' => [
-                'name' => 'create',
+                'name' => 'Create',
                 'icon' => 'zmdi zmdi-plus',
                 'permission' => 'lecture.create',
                 'href' => '/lecture/create',
                 'in url' => '/lecture/create'
-            ]
-        ]
-    ],
-    'LectureAssignments' => [
-        'name' => 'LectureAssignments',
-        'icon' => 'zmdi zmdi-graduation-cap',
-        'permission' => 'lectureAssignments.view',
-        'inurl' => '/lectureAssignments/',
-        'sub' => [
-            'list' => [
-                'name' => 'List',
-                'icon' => 'zmdi zmdi-view-list',
-                'permission' => 'lectureAssignments.view.list',
-                'href' => '/lectureAssignments/list',
-                'in url' => '/lectureAssignments/list'
-            ],
-            'create' => [
-                'name' => 'create',
-                'icon' => 'zmdi zmdi-plus',
-                'permission' => 'lectureAssignments.create',
-                'href' => '/lectureAssignments/create',
-                'in url' => '/lectureAssignments/create'
             ]
         ]
     ],
@@ -154,56 +132,11 @@ return [
                 'in url' => '/batch/list'
             ],
             'create' => [
-                'name' => 'create',
+                'name' => 'Create',
                 'icon' => 'zmdi zmdi-plus',
                 'permission' => 'batch.create',
                 'href' => '/batch/create',
                 'in url' => '/batch/create'
-            ]
-        ]
-    ],
-    'BatchStudents' => [
-        'name' => 'BatchStudents',
-        'icon' => 'zmdi zmdi-graduation-cap',
-        'permission' => 'batchStudents.view',
-        'inurl' => '/batchStudents/',
-        'sub' => [
-            'list' => [
-                'name' => 'List',
-                'icon' => 'zmdi zmdi-view-list',
-                'permission' => 'batchStudents.view.list',
-                'href' => '/batchStudents/list',
-                'in url' => '/batchStudents/list'
-            ],
-            'create' => [
-                'name' => 'create',
-                'icon' => 'zmdi zmdi-plus',
-                'permission' => 'batchStudents.create',
-                'href' => '/batchStudents/create',
-                'in url' => '/batchStudents/create'
-            ]
-        ]
-    ],
-    'AssignmentStudents' => [
-        'name' => 'AssignmentStudents',
-        'icon' => 'zmdi zmdi-graduation-cap',
-        'permission' => 'AssignmentStudents.view',
-        'inurl' => '/assignmentStudents/',
-        'sub' => [
-            'list' => [
-                'name' => 'List',
-                'icon' => 'zmdi zmdi-view-list',
-                'permission' => 'assignmentStudents.view.list',
-                'href' => '/assignmentStudents/list',
-                'in url' => '/assignmentStudents/list'
-            ],
-            'create' => [
-                'name' => 'create',
-                'icon' => 'zmdi zmdi-plus',
-                'permission' => 'assignmentStudents.create',
-                'href' => '/assignmentStudents/create',
-                'in url' => '/assignment
-                Students/create'
             ]
         ]
     ],
@@ -221,37 +154,13 @@ return [
                 'in url' => '/course/list'
             ],
             'create' => [
-                'name' => 'create',
+                'name' => 'Create',
                 'icon' => 'zmdi zmdi-plus',
                 'permission' => 'course.create',
                 'href' => '/course/create',
                 'in url' => '/course/create'
             ]
         ]
-    ],
-    'CourseBatchs' => [
-        'name' => 'CourseBatchs',
-        'icon' => 'zmdi zmdi-graduation-cap',
-        'permission' => 'CourseBatchs.view',
-        'inurl' => '/courseBatchs/',
-        'sub' => [
-            'list' => [
-                'name' => 'List',
-                'icon' => 'zmdi zmdi-view-list',
-                'permission' => 'courseBatchs.view.list',
-                'href' => '/courseBatchs/list',
-                'in url' => '/courseBatchs/list'
-            ],
-            'create' => [
-                'name' => 'create',
-                'icon' => 'zmdi zmdi-plus',
-                'permission' => 'courseBatchs.create',
-                'href' => '/courseBatchs/create',
-                'in url' => '/courseBatchs/create'
-            ]
-        ]
-    ],
-
-
+    ]
 
  ];

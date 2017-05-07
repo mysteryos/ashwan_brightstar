@@ -6,7 +6,7 @@
  * Time: 18:48
  */
 
-namespace app\Policies\Controllers;
+namespace App\Policies\Controllers;
 
 
 class BatchControllerPolicy extends BaseControllerPolicy
@@ -21,6 +21,14 @@ class BatchControllerPolicy extends BaseControllerPolicy
         return $this->user->hasAccess('batch.create');
     }
 
+    protected function postUpdate()
+    {
+        return $this->user->hasAccess('batch.update');
+    }
 
+    protected function getView($batch_id)
+    {
+        return true;
+    }
 
 }

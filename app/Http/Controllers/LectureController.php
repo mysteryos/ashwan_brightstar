@@ -19,7 +19,6 @@ class LectureController extends Controller
     protected $policy = '\App\Policies\Controllers\LectureControllerPolicy';
 
 
-
     /**
      * Construct
      */
@@ -39,7 +38,7 @@ class LectureController extends Controller
         $this->data['pageTitle'] = 'Lecture - List';
 
         //Set Data
-        $this->data['lecture_list'] = \App\Models\Lecture::orderBy('updated_at','DESC')->get();
+        $this->data['lecture_list'] = \App\Models\Lecture::orderBy('updated_at', 'DESC')->get();
 
         //Permissions
         $this->data['can_create_lecture'] = true;
@@ -64,6 +63,9 @@ class LectureController extends Controller
         //Permissions
         $this->data['can_create_lecture'] = true;
 
+        //Course List
+        $this->data['course_list'] = \App\Models\Course::orderBy('name', 'ASC')->get();
+
         //Assets
         $this->addJqueryValidate();
 
@@ -75,31 +77,85 @@ class LectureController extends Controller
 
     public function postCreate(Request $request)
     {
+
         //Verify User Access
         $this->verifyAccess();
 
+        //Validate Data from request
+        $this->validateData($request->all(),[
+            'first_name' => 'required|max:255|alpha',
+            'last_name' => 'required|max:255|alpha',
+            'email' => 'email|max:254',
+            'mobile_number' => 'numeric|digits_between:4,15'
+        ]);
+
+        //Create New Lecturer
+        $lecturer = new \App\Models\Lecturer();
+        //Fill in information from request
+        $lecturer->fill($request->all());
+        //Set creator user id to user currently logged in
+        $lecturer->creator_user_id = $this->user->id;
+        //Save to database
+        $lecturer->save();
+    }
+
+    /**
+     * POST: Update Lecture
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function postUpdate(Request $request)
+    {
+        //Verify User Access
+        $this->verifyAccess();
 
         //Validate Data from request
         $this->validateData($request->all(),[
-            'name' => 'required|max:255',
-            'description' => 'required|max:255',
-
+            'id' => 'required|max:5|alpha',
+            'name' => 'required|max:255|alpha',
+            'description' => 'description|max:254',
+            'course_id' => 'required|max:5|alpha',
         ]);
 
-        //Create New Lecture
-        $lecture = new \App\Models\Lecture();
+        $lecture = \App\Models\Lecture::findOrFail($request->get('id'));
+
         //Fill in information from request
         $lecture->fill($request->all());
-        //Set creator user id to user currently logged in
-        $lecture->creator_user_id = $this->user->id;
+
         //Save to database
         $lecture->save();
+
+        return redirect()->action('LectureController@getView',[$lecture->id]);
     }
 
+    /**
+     * GET: View Lecture
+     *
+     * @param int $assignment_id
+     * @return \Illuminate\View\View
+     */
+    public function getView($lecture_id)
+    {
+        $lecture = \App\Models\Lecture::findOrFail((int)$lecture_id);
 
+        //Verify User Access
+        $this->verifyAccess($lecture_id);
 
+        //Set Page Title
+        $this->data['pageTitle'] = 'Lecture - View - '.$lecture->name;
 
+        $this->data['lecture'] = $lecture;
 
+        /*
+         * Assets
+         */
+        $this->addJqueryValidate();
 
+        $this->addJs('/js/el/lecture.view.js');
+        $this->addCss('/css/el/lecture.view.css');
+
+        return $this->renderView('lecture.view');
+    }
 
 }
