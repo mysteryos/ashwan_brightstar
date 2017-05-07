@@ -31,4 +31,19 @@ class BatchControllerPolicy extends BaseControllerPolicy
         return true;
     }
 
+    protected function getViewStudent($batch_id)
+    {
+        return true;
+    }
+
+    protected function postCreateStudent($batch_id)
+    {
+        return $this->user->hasAccess('batch.update');
+    }
+
+    protected function postDeleteStudent($batch_id)
+    {
+        return $this->user->hasAccess('batch.delete');
+    }
+
 }

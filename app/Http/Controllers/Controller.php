@@ -270,4 +270,12 @@ abstract class Controller extends BaseController
         }
     }
 
+    protected function hasAccess($permissions)
+    {
+        if($this->isSuperAdmin) {
+            return true;
+        }
+
+        return $this->user->hasAccess($permissions);
+    }
 }

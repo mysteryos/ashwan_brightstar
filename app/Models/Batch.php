@@ -27,6 +27,10 @@ class Batch extends \Eloquent
 
     protected $dates = ['start_date'];
 
+    /*
+     * Relationships
+     */
+
     public function lecturer()
     {
         return $this->belongsTo(Lecturer::class, 'lecturer_id');
@@ -37,11 +41,14 @@ class Batch extends \Eloquent
         return $this->belongsTo(User::class, 'creator_user_id');
     }
 
-
     public function course()
     {
         return $this->belongsTo(Course::class, 'course_id');
+    }
 
+    public function student()
+    {
+        return $this->belongsToMany(Student::class, 'batch_students', 'batch_id' ,'student_id')->withTimestamps();
     }
 }
 

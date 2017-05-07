@@ -23,11 +23,6 @@ class Course extends \Eloquent
         'duration_months',
         'description'];
 
-
-
-
-
-
     /*
      * Relationships
      */

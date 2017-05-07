@@ -7,6 +7,7 @@
         <div class="pm-body clearfix">
             <ul class="tab-nav tn-justified">
                 <li class="active waves-effect"><a href="{{action('BatchController@getView',['student_id'=>$batch->id])}}">About</a></li>
+                <li class="waves-effect"><a href="{{action('BatchController@getViewStudent',['student_id'=>$batch->id])}}">Students</a></li>
             </ul>
 
             <div class="pmb-block">
@@ -38,15 +39,19 @@
                             </dl>
                             <dl class="dl-horizontal">
                                 <dt>Start Date*</dt>
-                                <dd>{{$batch->start_date->format('Y-m-d')}}</dd>
+                                <dd>@if($batch->start_date){{$batch->start_date->format('Y-m-d')}}@endif</dd>
                             </dl>
                             <dl class="dl-horizontal">
                                 <dt>Course*</dt>
-                                <dd>{{$batch->course->name}}</dd>
+                                <dd>@if($batch->course)<a href="{{action('CourseController@getView',$batch->course->id)}}">{{$batch->course->name}}</a>@endif</dd>
                             </dl>
                             <dl class="dl-horizontal">
                                 <dt>Lecturer*</dt>
-                                <dd>{{$batch->lecturer->name}}</dd>
+                                <dd>
+                                    @if($batch->lecturer)
+                                        <a href="{{action('LecturerController@getView',$batch->lecturer->id)}}" target="_blank">{{$batch->lecturer->name}}</a>
+                                    @endif
+                                </dd>
                             </dl>
                         </div>
 

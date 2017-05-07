@@ -91,7 +91,10 @@ class LecturerController extends Controller
         $lecturer->save();
     }
 
+    public function getView(Request $request, $lecturer_id)
+    {
 
+    }
     
 
 

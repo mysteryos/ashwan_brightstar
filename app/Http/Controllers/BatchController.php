@@ -8,6 +8,7 @@
 
 namespace app\Http\Controllers;
 
+use App\Exceptions\HttpExceptionWithError;
 use App\Traits\VendorLibraries;
 use Illuminate\Http\Request;
 
@@ -170,6 +171,103 @@ class BatchController extends Controller
         $this->addCss('/css/el/batch.view.css');
 
         return $this->renderView('batch.view');
+    }
+
+    /**
+     * View: Student list in batch
+     *
+     * @param $batch_id
+     * @return \Illuminate\View\View
+     */
+    public function getViewStudent($batch_id)
+    {
+        $batch = \App\Models\Batch::with('student')->findOrFail((int)$batch_id);
+
+        //Verify User Access
+        $this->verifyAccess($batch_id);
+
+        //Set Page Title
+        $this->data['pageTitle'] = 'Batch - View - Students - '.$batch->name;
+
+        $this->data['batch'] = $batch;
+
+        $this->data['hasBatchUpdateAccess'] = $this->hasAccess('batch.update');
+        $this->data['hasBatchDeleteAccess'] = $this->hasAccess('batch.delete');
+
+        //Student (Not in batch) List
+        $studentIds = $batch->student->map(function($row) {
+            return $row->id;
+        });
+
+        $this->data['student_list'] = \App\Models\Student::whereNotIn('id',$studentIds)->get();
+
+        $this->addJs('/js/el/batch.view_student.js');
+
+        return $this->renderView('batch.view-student');
+    }
+
+    /**
+     * POST: Add student to batch
+     *
+     * @param Request $request
+     * @return $this|\Illuminate\Http\RedirectResponse
+     */
+    public function postCreateStudent(Request $request)
+    {
+        $batch = \App\Models\Batch::with('student')->findOrFail(\Crypt::decrypt($request->get('id')));
+
+        //Verify User Access
+        $this->verifyAccess((int)$batch->id);
+
+        $student = \App\Models\Student::findOrFail(\Crypt::decrypt($request->get('student_id')));
+
+        $studentIds = $batch->student->map(function($row) {
+            return $row->id;
+        });
+
+        //Check if student is already in the batch
+        if(in_array($student->id, $studentIds->toArray())) {
+            return redirect()->back()->withErrors("Student with ID: {$student->id} is already in the batch");
+        }
+
+        $batch->student()->save($student);
+        $batch->touch();
+
+        return redirect()->back()->with([
+            'messages' => "Student with ID: {$student->id} was successfully added to the batch"
+        ]);
+    }
+
+    /**
+     * POST: Delete student from batch
+     *
+     * @param Request $request
+     * @return $this|\Illuminate\Http\RedirectResponse
+     */
+    public function postDeleteStudent(Request $request)
+    {
+        $batch = \App\Models\Batch::with('student')->findOrFail((int)$request->get('id'));
+
+        //Verify User Access
+        $this->verifyAccess((int)$batch->id);
+
+        $student = \App\Models\Student::findOrFail((int)$request->get('student_id'));
+
+        $studentIds = $batch->student->map(function($row) {
+            return $row->id;
+        });
+
+        //Check if student is not in the batch
+        if(!in_array($student->id, $studentIds->toArray())) {
+            return redirect()->back()->withErrors("Student with ID: {$student->id} is not in the batch");
+        }
+
+        $batch->student()->detach($student->id);
+        $batch->touch();
+
+        return redirect()->back()->with([
+            'messages' => "Student with ID: {$student->id} was successfully deleted from the batch"
+        ]);
     }
 
 }

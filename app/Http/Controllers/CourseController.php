@@ -86,6 +86,9 @@ class CourseController extends Controller
         $course->save();
     }
 
+    public function getView()
+    {
 
+    }
 
 }
