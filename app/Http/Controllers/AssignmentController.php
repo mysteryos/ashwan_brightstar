@@ -52,6 +52,8 @@ class AssignmentController extends Controller
 
     public function getCreate()
     {
+        //Verify User Access
+        $this->verifyAccess();
 
         //Set Page Title
         $this->data['pageTitle'] = 'Assignment- Create';
@@ -59,8 +61,8 @@ class AssignmentController extends Controller
         //Permissions
         $this->data['can_create_assignment'] = true;
 
-        //Lecturer List
-        $this->data['lecture_list'] = \App\Models\Lecture::orderBy('name','ASC')->get();
+        //Assignment List
+        $this->data['assignment_list'] = \App\Models\Assignment::orderBy('name','ASC')->get();
         //Assets
         $this->addJqueryValidate();
         $this->addMoment();
@@ -74,13 +76,16 @@ class AssignmentController extends Controller
 
     public function postCreate(Request $request)
     {
+        //Verify User Access
+        $this->verifyAccess();
 
         //Validate Data from request
         $this->validateData($request->all(),[
-            'name' => 'required|max:255',
-            'description' => 'required|max:255',
-            'submission_date' => 'required|date_format:Y-m-d|after:tomorrow',
-            'lecture_id' => 'required|exists:lecture,id'
+            'id' => 'required|max:5|alpha',
+            'name' => 'required|max:255|alpha',
+            'description' => 'description|max:254',
+            'lecture_id' => 'numeric|max:5|alpha',
+            'submission_date' => 'timestamp'
         ]);
 
         //Create New Assignment
@@ -89,13 +94,68 @@ class AssignmentController extends Controller
         $assignment->fill($request->all());
         //Set creator user id to user currently logged in
         $assignment->creator_user_id = $this->user->id;
-
-        //Set Lecture
-        $assignment->lecture_id = $request->get('lecture_id');
-
         //Save to database
         $assignment->save();
     }
 
+    /**
+     * POST: Update Assignment
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function postUpdate(Request $request)
+    {
+        //Verify User Access
+        $this->verifyAccess();
+
+        //Validate Data from request
+        $this->validateData($request->all(),[
+            'id' => 'required|max:5|alpha',
+            'name' => 'required|max:255|alpha',
+            'description' => 'description|max:254',
+            'lecture_id' => 'numeric|max:5|alpha',
+            'submission_date' => 'timestamp'
+        ]);
+
+        $assignment = \App\Models\Assignment::findOrFail($request->get('id'));
+
+        //Fill in information from request
+        $assignment->fill($request->all());
+
+        //Save to database
+        $assignment->save();
+
+        return redirect()->action('AssignmentController@getView',[$assignment->id]);
+    }
+
+    /**
+     * GET: View Assignment
+     *
+     * @param int $assignment_id
+     * @return \Illuminate\View\View
+     */
+    public function getView($assignment_id)
+    {
+        $assignment = \App\Models\Assignment::findOrFail((int)$assignment_id);
+
+        //Verify User Access
+        $this->verifyAccess($assignment_id);
+
+        //Set Page Title
+        $this->data['pageTitle'] = 'Assignment - View - '.$assignment->name;
+
+        $this->data['assignment'] = $assignment;
+
+        /*
+         * Assets
+         */
+        $this->addJqueryValidate();
+
+        $this->addJs('/js/el/assignment.view.js');
+        $this->addCss('/css/el/assignment.view.css');
+
+        return $this->renderView('assignment.view');
+    }
 
 }

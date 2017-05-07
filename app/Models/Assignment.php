@@ -20,10 +20,33 @@ class Assignment extends \Eloquent
      * @var array
      */
     protected $fillable = [
+        'id',
         'name',
         'description',
         'submission_date'
     ];
+    /**
+     * Additional attributes available on model
+     *
+     * @var array
+     */
+    protected $appends = ['name'];
+
+    /**
+     * ACCESSOR: Name
+     *
+     * @return string
+     */
+    public function getNameAttribute()
+    {
+        return "{$this->first_name} {$this->last_name}";
+    }
+
+    /**
+     * Relationships
+     *
+     */
+
 
     public function creator()
     {

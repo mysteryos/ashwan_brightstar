@@ -6,7 +6,7 @@
  * Time: 18:48
  */
 
-namespace app\Policies\Controllers;
+namespace App\Policies\Controllers;
 
 
 class AssignmentControllerPolicy extends BaseControllerPolicy
@@ -20,7 +20,15 @@ class AssignmentControllerPolicy extends BaseControllerPolicy
     {
         return $this->user->hasAccess('assignment.create');
     }
+    protected function postUpdate()
+    {
+        return $this->user->hasAccess('assignment.update');
+    }
 
+    protected function getView($assignment_id)
+    {
+        return true;
+    }
 
 
 }

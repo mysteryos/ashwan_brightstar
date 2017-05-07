@@ -10,7 +10,7 @@ $(function(){
         caseSensitive: false,
         formatters: {
             "commands": function(column, row) {
-                return "<a class=\"btn btn-icon command-edit\" data-row-id=\"" + row.id + "\" href=\"/lecture/view/" + row.id + "\" title=\"View lecture profile\"><i class=\"zmdi zmdi-eye p-t-10\"></i></a> ";
+                return "<a class=\"btn btn-icon command-edit\" data-row-id=\"" + row.id + "\" href=\"/lecture/view/" + row.id + "\" title=\"View lecture details\"><i class=\"zmdi zmdi-eye p-t-10\"></i></a> ";
             }
         }
     });

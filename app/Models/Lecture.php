@@ -20,10 +20,36 @@ class Lecture extends \Eloquent
      * @var array
      */
     protected $fillable = [
+        'id',
         'name',
         'description',
+        'course_id'
 
     ];
+
+    /**
+     * Additional attributes available on model
+     *
+     * @var array
+     */
+    protected $appends = ['name'];
+
+    /**
+     * ACCESSOR: Name
+     *
+     * @return string
+     */
+    public function getNameAttribute()
+    {
+        return "{$this->first_name} {$this->last_name}";
+    }
+
+    /**
+     * Relationships
+     *
+     */
+
+
 
 
 

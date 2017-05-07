@@ -25,6 +25,18 @@
                 </div>
 
                 <div class="form-group">
+                    <label class="col-sm-2 control-label" for="inputDescription">ID*</label>
+                    <div class="col-sm-10">
+                        <div class="fg-line">
+                            <input name="LectureID" type="text" placeholder="LectureID" id="inputLectureID" class="form-control input-sm" value="{{old('lecture_id')}}">
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+                <div class="form-group">
                     <label class="col-sm-2 control-label" for="inputCourseId">Course*</label>
                     <div class="col-sm-10">
                         <div class="fg-line">

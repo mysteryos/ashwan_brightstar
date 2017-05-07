@@ -1,8 +1,3 @@
-/**
- * Created by user on 26/04/2017.
- */
-
-
 $(function(){
     $.validator.setDefaults({
         highlight: function (element) {
@@ -19,20 +14,33 @@ $(function(){
         }
     });
 
+    $.validator.addMethod("lettersonly", function(value, element) {
+        return this.optional(element) || /^[a-z ]+$/i.test(value);
+    }, "Letters only please");
+
+
     //Validate
     $('#lecture_create_form').validate({
         rules: {
+            id: {
+                required: true,
+                maxlength: 5,
+                digitsonly: true
+            },
             name: {
                 required: true,
-                maxlength: 255
+                maxlength: 255,
+                lettersonly: true
             },
             description: {
-                required: true
+                description: true,
+                maxlength: 254
             },
             course_id: {
-                required: true
-            }
+                required: true,
+                maxlength: 5,
+                digitsonly: true
+            },
         }
     });
 });
-

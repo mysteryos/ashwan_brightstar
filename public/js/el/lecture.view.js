@@ -1,10 +1,12 @@
 $(function(){
     $.validator.setDefaults({
+        //for Chosen selects
+        ignore: ":hidden:not(select)",
         highlight: function (element) {
-            $(element).closest('.form-group').addClass('has-error');
+            $(element).parents('.dl-horizontal').addClass('has-error');
         },
         unhighlight: function (element) {
-            $(element).closest('.form-group').removeClass('has-error');
+            $(element).parents('.dl-horizontal').removeClass('has-error');
         },
         errorElement: 'small',
         errorClass: 'help-block',
@@ -17,7 +19,6 @@ $(function(){
     $.validator.addMethod("lettersonly", function(value, element) {
         return this.optional(element) || /^[a-z ]+$/i.test(value);
     }, "Letters only please");
-
 
     //Validate
     $('#assignment_create_form').validate({
@@ -36,15 +37,12 @@ $(function(){
                 description: true,
                 maxlength: 254
             },
-            submission_date: {
-                required: true
-            },
-            lecture_id: {
+            course_id: {
                 required: true,
                 maxlength: 5,
                 digitsonly: true
-
-            }
+            },
         }
     });
 });
+
