@@ -19,6 +19,7 @@ class Batch extends \Eloquent
      * @var array
      */
     protected $fillable = [
+        'id',
         'name',
         'start_date',
         'course_id',

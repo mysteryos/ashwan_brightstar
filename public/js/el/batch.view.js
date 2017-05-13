@@ -21,6 +21,13 @@ $(function(){
     //Validate
     $('#batch_basic_info_form').validate({
         rules: {
+
+            id: {
+                required: true,
+                maxlength: 5
+            },
+
+
             name: {
                 required: true,
                 maxlength: 255
