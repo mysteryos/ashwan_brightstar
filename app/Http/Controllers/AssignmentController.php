@@ -10,6 +10,7 @@ namespace app\Http\Controllers;
 
 use App\Traits\VendorLibraries;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\File\Exception\AccessDeniedException;
 
 
 class AssignmentController extends Controller
@@ -127,6 +128,51 @@ class AssignmentController extends Controller
         $assignment->save();
 
         return redirect()->action('AssignmentController@getView',[$assignment->id]);
+    }
+
+    public function postUpload(Request $request)
+    {
+        $this->verifyAccess();
+
+
+        //@TODO: Block by file mime types
+        $this->validateData($request->all(), [
+            'id' => 'exists:assignment,id'
+        ]);
+
+        $file = $request->file('file');
+
+        if($file->isValid()) {
+            $assignment = \App\Models\Assignment::findOrFail($request->get('id'));
+
+            //If assignment is still active, allow submission
+            if($assignment->isActive()) {
+
+                //Get Student Profile
+                $student = $this->user->student;
+                if($student) {
+                    /*
+                     * Save file to disk
+                     */
+                    $fileName = time();
+                    //Create Directory
+                    $directory = \Storage::makeDirectory('assignment_'.$assignment->id);
+                    //Save file to directory
+                    \Storage::put(
+                        "assignment_{$assignment->id}/$fileName.{$file->guessExtension()}",
+                        file_get_contents($file->getRealPath())
+                    );
+
+
+
+                } else {
+                    throw new AccessDeniedException("Only students can upload submissions");
+                }
+            }
+        } else {
+            return redirect()->back()->withErrors(['The uploaded file is not valid. Please try again.']);
+        }
+
     }
 
     /**

@@ -46,7 +46,7 @@
                             </dl>
                             <dl class="dl-horizontal">
                                 <dt>Submission date</dt>
-                                <dd>{{$assignment->submission_date}}</dd>
+                                <dd>@if($assignment->submission_date){{$assignment->submission_date->format('Y-m-d')}}@endif</dd>
                             </dl>
 
                         </div>
@@ -96,6 +96,18 @@
                             </div>
                         </div>
                     </form>
+                    @if($assignment->isActive())
+                        <form class="form-horizontal" action="{{action('AssignmentController@postUpload')}}" method="post" name="assignment_upload_form" id="assignment_upload_form" enctype="multipart/form-data">
+                            <input type="hidden" name="id" value="{{$assignment->id}}" />
+                            {{csrf_field()}}
+                            <div class="col-xs-4">
+                                <input type="file" name="file" />
+                            </div>
+                            <div class="col-xs-12">
+                                <button class="btn btn-primary btn-sm" type="submit">Upload</button>
+                            </div>
+                        </form>
+                    @endif
                 </div>
             </div>
         </div>

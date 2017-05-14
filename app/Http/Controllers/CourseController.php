@@ -33,10 +33,14 @@ class CourseController extends Controller
 
     public function getList()
     {
+        //Verify User Access
+        $this->verifyAccess();
+
         //Set Page Title
         $this->data['pageTitle'] = 'Course - List';
 
         //Set Data
+        $this->data['course_list'] = \App\Models\Course::orderBy('updated_at','DESC')->get();
 
         //Permissions
         $this->data['can_create_course'] = true;

@@ -31,11 +31,6 @@
                     <form action="{{action('LectureController@postUpdate')}}" method="post" name="lecture_info_form" id="lecture_info_form">
                         <input type="hidden" name="id" value="{{$lecture->id}}" />
                         {{csrf_field()}}
-                        <div class="pmbb-view">
-                            <dl class="dl-horizontal">
-                                <dt>ID</dt>
-                                <dd>{{$lecture->id}}</dd>
-                            </dl>
                             <dl class="dl-horizontal">
                                 <dt>Name</dt>
                                 <dd>{{$lecture->name}}</dd>
@@ -45,22 +40,12 @@
                                 <dd>{{$lecture->description}}</dd>
                             </dl>
                             <dl class="dl-horizontal">
-                                <dt>Submission date</dt>
-                                <dd>{{$lecture->course_id}}</dd>
+                                <dt>Course</dt>
+                                <dd>@if($lecture->course){{$lecture->course->name}}@endif</dd>
                             </dl>
-
                         </div>
 
                         <div class="pmbb-edit">
-                            <dl class="dl-horizontal">
-                                <dt class="p-t-10 form-label">ID</dt>
-                                <dd>
-                                    <div class="fg-line">
-                                        <input type="text" class="form-control" placeholder="ID" name="ID" value="{{$lecture->id}}">
-                                    </div>
-                                </dd>
-                            </dl>
-
                             <dl class="dl-horizontal">
                                 <dt class="p-t-10 form-label">Name</dt>
                                 <dd>
@@ -87,9 +72,6 @@
                                     </div>
                                 </dd>
                             </dl>
-
-
-
                             <div class="m-t-30">
                                 <button class="btn btn-primary btn-sm" type="submit">Save</button>
                                 <button data-pmb-action="reset" class="btn btn-link btn-sm" type="reset">Cancel</button>

@@ -17,7 +17,6 @@ class BatchStudents extends \Eloquent
         return $this->belongsTo(User::class,'creator_user_id');
     }
 
-
     public function batch() {
         return $this->belongsTo(Batch::class,'batch_id');
     }

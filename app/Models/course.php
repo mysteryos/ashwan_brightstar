@@ -42,4 +42,9 @@ class Course extends \Eloquent
     {
         return $this->belongsTo(User::class, 'creator_user_id');
     }
+
+    public function batch()
+    {
+        return $this->hasOne(Batch::class, 'course_id');
+    }
 }

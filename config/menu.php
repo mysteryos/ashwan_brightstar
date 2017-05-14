@@ -54,7 +54,6 @@ return [
     'assignment' => [
         'name' => 'Assignment',
         'icon' => 'zmdi zmdi-assignment',
-        'permission' => 'assignment.view',
         'inurl' => '/assignment/',
         'sub' => [
             'list' => [
@@ -73,39 +72,38 @@ return [
                 ]
 
             ]
+    ],
+     'lecturer' => [
+        'name' => 'Lecturer',
+        'icon' => 'zmdi zmdi-accounts-list',
+        'permission' => 'lecturer.view',
+        'inurl' => '/lecturer/',
+        'sub' => [
+            'list' => [
+                'name' => 'List',
+                'icon' => 'zmdi zmdi-view-list',
+                'permission' => 'lecturer.view.list',
+                'href' => '/lecturer/list',
+                'in url' => '/lecturer/list'
             ],
- 'lecturer' => [
-    'name' => 'Lecturer',
-    'icon' => 'zmdi zmdi-accounts-list',
-    'permission' => 'lecturer.view',
-    'inurl' => '/lecturer/',
-    'sub' => [
-        'list' => [
-            'name' => 'List',
-            'icon' => 'zmdi zmdi-view-list',
-            'permission' => 'lecturer.view.list',
-            'href' => '/lecturer/list',
-            'in url' => '/lecturer/list'
-        ],
-        'create' => [
-            'name' => 'Create',
-            'icon' => 'zmdi zmdi-plus',
-            'permission' => 'lecturer.create',
-            'href' => '/lecturer/create',
-            'in url' => '/lecturer/create'
+            'create' => [
+                'name' => 'Create',
+                'icon' => 'zmdi zmdi-plus',
+                'permission' => 'lecturer.create',
+                'href' => '/lecturer/create',
+                'in url' => '/lecturer/create'
+                ]
             ]
-        ]
     ],
     'lecture' => [
         'name' => 'Lecture',
         'icon' => 'zmdi zmdi-graduation-cap',
-        'permission' => 'lecture.view',
         'inurl' => '/lecture/',
         'sub' => [
             'list' => [
                 'name' => 'List',
                 'icon' => 'zmdi zmdi-view-list',
-                'permission' => 'lecture.view.list',
+                'permission' => 'lecture.list.view',
                 'href' => '/lecture/list',
                 'in url' => '/lecture/list'
             ],
@@ -143,13 +141,12 @@ return [
     'Course' => [
         'name' => 'Course',
         'icon' => 'zmdi zmdi-graduation-cap',
-        'permission' => 'Course.view',
         'inurl' => '/course/',
         'sub' => [
             'list' => [
                 'name' => 'List',
                 'icon' => 'zmdi zmdi-view-list',
-                'permission' => 'course.view.list',
+                'permission' => 'course.list.view',
                 'href' => '/course/list',
                 'in url' => '/course/list'
             ],

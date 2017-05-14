@@ -25,28 +25,15 @@ class Assignment extends \Eloquent
         'description',
         'submission_date'
     ];
-    /**
-     * Additional attributes available on model
-     *
-     * @var array
-     */
-    protected $appends = ['name'];
 
-    /**
-     * ACCESSOR: Name
-     *
-     * @return string
-     */
-    public function getNameAttribute()
-    {
-        return "{$this->first_name} {$this->last_name}";
-    }
+    protected $dates = [
+        'submission_date'
+    ];
 
     /**
      * Relationships
      *
      */
-
 
     public function creator()
     {
@@ -69,6 +56,13 @@ class Assignment extends \Eloquent
         return $this->belongsTo(LectureAssignments::class,'id');
     }
 
+    public function isActive()
+    {
+        if($this->submission_date) {
+            return \Carbon\Carbon::now()->diffInDays($this->submission_date,false) >= 0;
+        }
 
+        return false;
+    }
 
 }

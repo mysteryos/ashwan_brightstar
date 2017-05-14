@@ -6,7 +6,7 @@
  * Time: 18:48
  */
 
-namespace app\Policies\Controllers;
+namespace App\Policies\Controllers;
 
 
 class CourseControllerPolicy extends BaseControllerPolicy
@@ -21,16 +21,28 @@ class CourseControllerPolicy extends BaseControllerPolicy
         return $this->user->hasAccess('course.create');
     }
 
+    protected function getList()
+    {
+        return $this->user->hasAccess('course.list.view');
+    }
     protected function postUpdate()
     {
         return $this->user->hasAccess('course.update');
     }
 
+<<<<<<< .mine
     protected function getView($course_id)
     {
         return true;
     }
 
+=======
+
+
+
+
+
+>>>>>>> .theirs
     protected function getViewCourse($course_id)
     {
         return true;

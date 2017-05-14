@@ -11,6 +11,12 @@ namespace App\Policies\Controllers;
 
 class StudentControllerPolicy extends BaseControllerPolicy
 {
+    public function __construct($user)
+    {
+        parent::__construct($user);
+        $this->lecturerService = app('App\Services\Lecturer');
+
+    }
     protected function getCreate()
     {
         return $this->user->hasAccess('student.create');
@@ -26,8 +32,20 @@ class StudentControllerPolicy extends BaseControllerPolicy
         return $this->user->hasAccess('student.update');
     }
 
-    protected function getView($student_id)
+    protected function getView($student)
     {
-        return true;
+        $studentViewSelfProfile = false;
+
+        $student->load('user');
+        if($student->user) {
+            $studentViewSelfProfile = $student->user->id === $this->user->id;
+        }
+
+        return $this->user->hasAccess('student.view') || $this->lecturerService->isLecturer($this->user) || $studentViewSelfProfile;
+    }
+
+    protected function getList()
+    {
+        return $this->lecturerService->isLecturer($this->user) || $this->user->hasAccess('student.list.view');
     }
 }
