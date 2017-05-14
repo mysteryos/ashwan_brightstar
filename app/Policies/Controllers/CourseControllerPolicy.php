@@ -21,6 +21,31 @@ class CourseControllerPolicy extends BaseControllerPolicy
         return $this->user->hasAccess('course.create');
     }
 
+    protected function postUpdate()
+    {
+        return $this->user->hasAccess('course.update');
+    }
+
+    protected function getView($course_id)
+    {
+        return true;
+    }
+
+    protected function getViewCourse($course_id)
+    {
+        return true;
+    }
+
+    protected function postCreateCourse($course_id)
+    {
+        return $this->user->hasAccess('course.update');
+    }
+
+    protected function postDeleteCourse($course_id)
+    {
+        return $this->user->hasAccess('course.delete');
+    }
+
 
 
 }

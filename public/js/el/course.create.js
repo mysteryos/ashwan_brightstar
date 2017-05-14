@@ -21,6 +21,13 @@ $(function(){
     //Validate
     $('#course_create_form').validate({
         rules: {
+
+            course_id: {
+                required: true,
+                maxlength: 5
+            },
+
+
             name: {
                 required: true,
                 maxlength: 255
