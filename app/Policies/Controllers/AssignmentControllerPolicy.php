@@ -30,5 +30,10 @@ class AssignmentControllerPolicy extends BaseControllerPolicy
         return true;
     }
 
+    protected function postUpload()
+    {
+        return true;
+    }
+
 
 }

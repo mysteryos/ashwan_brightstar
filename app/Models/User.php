@@ -14,13 +14,23 @@ class User extends EloquentUser
 {
     protected $guarded = ['permissions'];
 
-    /*
-     *  Relationships
-     */
 
+    /**
+     * Utility function to get full name of user
+     *
+     * @return string
+     */
     public function getName()
     {
         return $this->first_name." ".$this->last_name;
+    }
+
+    /*
+     *  Relationships
+     */
+    public function student()
+    {
+        return $this->hasOne(Student::class, 'user_id');
     }
 
 }

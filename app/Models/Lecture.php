@@ -6,7 +6,7 @@
  * Time: 22:57
  */
 
-namespace app\Models;
+namespace App\Models;
 
 
 class Lecture extends \Eloquent
@@ -50,13 +50,9 @@ class Lecture extends \Eloquent
      */
 
 
-
-
-
-
     public function course()
     {
-        return $this->hasMany(Course::class, 'course_id');
+        return $this->belongsTo(Course::class, 'course_id');
     }
 
     public function creator()

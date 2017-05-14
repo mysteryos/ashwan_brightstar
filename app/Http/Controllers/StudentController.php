@@ -33,6 +33,8 @@ class StudentController extends Controller
 
     public function getList()
     {
+        $this->verifyAccess();
+
         //Set Page Title
         $this->data['pageTitle'] = 'Student - List';
 
@@ -59,7 +61,7 @@ class StudentController extends Controller
         $this->data['pageTitle'] = 'Student - Create';
 
         //Permissions
-        $this->data['can_create_student'] = true;
+        $this->data['can_create_student'] = $this->user->hasAccess('student.create');
 
         //Assets
         $this->addJqueryValidate();
@@ -89,6 +91,8 @@ class StudentController extends Controller
         $student->creator_user_id = $this->user->id;
         //Save to database
         $student->save();
+
+        return redirect()->action('StudentController@getView',[$student->id]);
     }
 
     /**
@@ -133,7 +137,7 @@ class StudentController extends Controller
         $student = \App\Models\Student::findOrFail((int)$student_id);
 
         //Verify User Access
-        $this->verifyAccess($student_id);
+        $this->verifyAccess($student->id);
 
         //Set Page Title
         $this->data['pageTitle'] = 'Student - View - '.$student->name;

@@ -23,7 +23,7 @@
                         <th data-column-id="id" data-type="numeric">ID</th>
                         <th data-column-id="name" > Name</th>
                         <th data-column-id="description">Description</th>
-                        <th data-column-id="course_id">CourseID</th>
+                        <th data-column-id="course">Course</th>
 
                         @if($isSuperAdmin)
                             <th data-column-id="created_at" data-order="desc">Created at</th>
@@ -38,7 +38,7 @@
                         <td>{{$lecture_row->id}}</td>
                         <td>{{$lecture_row->name}}</td>
                         <td>{{$lecture_row->description}}</td>
-                        <td>{{$lecture_row->course_id}}</td>
+                        <td>@if($lecture_row->course){{$lecture_row->course->name}}@endif</td>
 
                         @if($isSuperAdmin)
                             <td>{{$lecture_row->created_at}}</td>

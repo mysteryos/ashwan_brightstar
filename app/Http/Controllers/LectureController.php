@@ -30,15 +30,39 @@ class LectureController extends Controller
          */
 
         $this->middleware('auth');
+
+        $this->studentService = app('App\Services\Student');
     }
 
     public function getList()
     {
+        //Verify User Access
+        $this->verifyAccess();
+
         //Set Page Title
         $this->data['pageTitle'] = 'Lecture - List';
 
         //Set Data
-        $this->data['lecture_list'] = \App\Models\Lecture::orderBy('updated_at', 'DESC')->get();
+
+        //If user is a student
+        if($this->studentService->isStudent($this->user)) {
+            $studentProfile = \App\Models\Student::where('user_id','=',$this->user->id)->first();
+
+            $this->data['lecture_list'] = \App\Models\Lecture::orderBy('updated_at', 'DESC')
+                                        ->with('course')
+                                        ->whereHas('course',function($q) use($studentProfile){
+                                            return $q->whereHas('batch', function($q) use($studentProfile) {
+                                                return $q->whereHas('student', function($q) use ($studentProfile) {
+                                                   return $q->where('student_id','=',$studentProfile->id);
+                                                });
+                                            });
+                                        })
+                                        ->get();
+        } else {
+            //Is a lecturer or admin
+            $this->data['lecture_list'] = \App\Models\Lecture::orderBy('updated_at', 'DESC')->with('course')->get();
+        }
+
 
         //Permissions
         $this->data['can_create_lecture'] = true;
@@ -55,7 +79,6 @@ class LectureController extends Controller
     {
         //Verify User Access
         $this->verifyAccess();
-
 
         //Set Page Title
         $this->data['pageTitle'] = 'Lecture - Create';
@@ -132,15 +155,34 @@ class LectureController extends Controller
     /**
      * GET: View Lecture
      *
-     * @param int $assignment_id
+     * @param int $lecture_id
      * @return \Illuminate\View\View
      */
     public function getView($lecture_id)
     {
-        $lecture = \App\Models\Lecture::findOrFail((int)$lecture_id);
+        $lecture = \App\Models\Lecture::with('course')->findOrFail((int)$lecture_id);
 
         //Verify User Access
-        $this->verifyAccess($lecture_id);
+        $this->verifyAccess($lecture);
+
+        //If user is a student
+        if($this->studentService->isStudent($this->user)) {
+            $studentProfile = \App\Models\Student::where('user_id','=',$this->user->id)->first();
+
+            $this->data['lecture_list'] = \App\Models\Lecture::orderBy('updated_at', 'DESC')
+                ->with('course')
+                ->whereHas('course',function($q) use($studentProfile){
+                    return $q->whereHas('batch', function($q) use($studentProfile) {
+                        return $q->whereHas('student', function($q) use ($studentProfile) {
+                            return $q->where('student_id','=',$studentProfile->id);
+                        });
+                    });
+                })
+                ->get();
+        } else {
+            //Is a lecturer or admin
+            $this->data['lecture_list'] = \App\Models\Lecture::orderBy('updated_at', 'DESC')->with('course')->get();
+        }
 
         //Set Page Title
         $this->data['pageTitle'] = 'Lecture - View - '.$lecture->name;
