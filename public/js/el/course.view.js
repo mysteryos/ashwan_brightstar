@@ -1,5 +1,3 @@
-
-
 $(function(){
     $.validator.setDefaults({
         //for Chosen selects
@@ -32,14 +30,12 @@ $(function(){
                 required: true,
                 maxlength: 255
             },
-            start_date: {
+            duration_months: {
                 required: true,
             },
-            course_id: {
+            description: {
                 required: true,
-            },
-            lecturer_id: {
-                required: true
+
             }
         }
     });
@@ -64,5 +60,6 @@ $(function(){
             moment('2017-11-02'),
             moment('2017-12-25')
         ]
+
     });
 });

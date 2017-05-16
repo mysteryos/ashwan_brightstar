@@ -82,6 +82,7 @@ class BatchController extends Controller
     {
         //Validate Data from request
         $this->validateData($request->all(),[
+            'id' => 'required|max:255',
             'name' => 'required|max:255',
             'start_date' => 'required|date_format:Y-m-d',
             'course_id' => 'required|exists:course,id',
@@ -95,7 +96,7 @@ class BatchController extends Controller
         //Set creator user id to user currently logged in
         $batch->creator_user_id = $this->user->id;
 
-        //Set Lecture Id
+        //Set Lecturer Id
         $batch->lecturer_id = $request->get('lecturer_id');
 
         //Set Course Id

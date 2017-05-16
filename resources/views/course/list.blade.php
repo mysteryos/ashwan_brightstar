@@ -20,7 +20,7 @@
             <table id="data-table" class="table table-striped table-vmiddle">
                 <thead>
                     <tr>
-                        <th data-column-id="id" data-type="numeric">ID</th>
+                        <th data-column-id="course_id" data-type="numeric">ID</th>
                         <th data-column-id="name" > Name</th>
                         <th data-column-id="duration_months" > Duration Months</th>
                         <th data-column-id="description">Description</th>
