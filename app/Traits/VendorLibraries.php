@@ -88,4 +88,9 @@ trait VendorLibraries
 
     }
 
+    public function addFileInput()
+    {
+        $this->addJs('/vendors/fileinput/fileinput.min.js');
+    }
+
 }

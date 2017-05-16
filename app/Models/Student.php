@@ -9,8 +9,12 @@
 namespace App\Models;
 
 
+use Illuminate\Database\Eloquent\Collection;
+
 class Student extends \Eloquent
 {
+    use \Illuminate\Database\Eloquent\SoftDeletes;
+
     protected $table = 'student';
 
     /**
@@ -48,11 +52,33 @@ class Student extends \Eloquent
      *
      */
 
-    public function creator() {
+    /**
+     * Creator
+     *
+     * @return User
+     */
+    public function creator()
+    {
         return $this->belongsTo(User::class,'creator_user_id');
     }
 
-    public function user() {
+    /**
+     * User
+     *
+     * @return User
+     */
+    public function user()
+    {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    /**
+     * Batch
+     *
+     * @return Collection
+     */
+    public function batch()
+    {
+        return $this->belongsToMany(Batch::class, 'batch_students','student_id','batch_id')->withTimestamps();
     }
 }

@@ -8,6 +8,7 @@
 
 namespace app\Http\Controllers;
 
+use App\Exceptions\HttpExceptionWithError;
 use App\Traits\VendorLibraries;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\File\Exception\AccessDeniedException;
@@ -30,6 +31,8 @@ class AssignmentController extends Controller
          */
 
         $this->middleware('auth');
+
+        $this->studentService = app('App\Services\Student');
     }
 
     public function getList()
@@ -158,12 +161,36 @@ class AssignmentController extends Controller
                     //Create Directory
                     $directory = \Storage::makeDirectory('assignment_'.$assignment->id);
                     //Save file to directory
-                    \Storage::put(
-                        "assignment_{$assignment->id}/$fileName.{$file->guessExtension()}",
+                    $path = "assignment_{$assignment->id}/$fileName.{$file->guessExtension()}";
+                    if(\Storage::put(
+                        $path,
                         file_get_contents($file->getRealPath())
-                    );
+                    )) {
+                        //save File info to DB
+                        $file = new \App\Models\File([
+                            'name' => $file->getClientOriginalName(),
+                            'extension' => $file->guessExtension(),
+                            'mime' => $file->getMimeType(),
+                            'path' => $path,
+                        ]);
+                        $file->creator()->associate($this->user);
+                        $file->save();
 
+                        //Add file to assignment, by student
+                        $assignmentStudent = new \App\Models\AssignmentStudents();
+                        $assignmentStudent->creator()->associate($this->user);
+                        $assignmentStudent->assignment()->associate($assignment);
+                        $assignmentStudent->student()->associate($student);
+                        $assignmentStudent->file()->associate($file);
 
+                        $assignmentStudent->save();
+
+                        return redirect()->back()->with([
+                            'messages' => 'Submission of assignment has been successfully received'
+                        ]);
+                    } else {
+                        throw new HttpExceptionWithError(500,['Unable to save file to server. Please try again.']);
+                    }
 
                 } else {
                     throw new AccessDeniedException("Only students can upload submissions");
@@ -193,15 +220,31 @@ class AssignmentController extends Controller
 
         $this->data['assignment'] = $assignment;
 
+        $this->data['isStudent'] = $this->studentService->isStudent($this->user);
+        $this->data['hasSubmitted'] = false;
+
+        if($this->data['isStudent']) {
+            //Check if already submitted assignment
+            $this->user->load('student');
+            $this->data['hasSubmitted'] = \App\Models\AssignmentStudents::where('student_id','=',$this->user->student->id)
+                                            ->where('assignment_id','=',$assignment->id)
+                                            ->count() > 0;
+        }
+
         /*
          * Assets
          */
         $this->addJqueryValidate();
+        $this->addFileInput();
 
         $this->addJs('/js/el/assignment.view.js');
-        $this->addCss('/css/el/assignment.view.css');
 
         return $this->renderView('assignment.view');
+    }
+
+    public function getViewSubmission()
+    {
+
     }
 
 }

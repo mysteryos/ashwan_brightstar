@@ -7,6 +7,7 @@
         <div class="pm-body clearfix">
             <ul class="tab-nav tn-justified">
                 <li class="active waves-effect"><a href="{{action('AssignmentController@getView',['assignment_id'=>$assignment->id])}}">About</a></li>
+                <li class="waves-effect"><a href="{{action('AssignmentController@getViewSubmission',['assignment_id'=>$assignment->id])}}">Submissions</a></li>
             </ul>
 
             <div class="pmb-block">
@@ -96,20 +97,31 @@
                             </div>
                         </div>
                     </form>
-                    @if($assignment->isActive())
+                </div>
+            </div>
+            @if($assignment->isActive() && $isStudent)
+                <div class="pmb-block">
+                    <div class="pmbb-header">
+                        <h2><i class="zmdi zmdi-upload m-r-5"></i> @if(!$hasSubmitted)Submit your assignment:@else You have already submitted your assigment: @endif</h2>
+                    </div>
+                    <div class="pmbb-body p-l-30">
                         <form class="form-horizontal" action="{{action('AssignmentController@postUpload')}}" method="post" name="assignment_upload_form" id="assignment_upload_form" enctype="multipart/form-data">
                             <input type="hidden" name="id" value="{{$assignment->id}}" />
                             {{csrf_field()}}
-                            <div class="col-xs-4">
-                                <input type="file" name="file" />
+                            <div class="fileinput fileinput-new" data-provides="fileinput">
+                                <span class="btn btn-primary btn-file m-r-10 waves-effect">
+                                    <span class="fileinput-new">Select file</span>
+                                    <span class="fileinput-exists">Change</span>
+                                    <input type="hidden" value="" name="..."><input type="file" name="file" id="assignmentUploadFile">
+                                </span>
+                                <span class="fileinput-filename"></span>
+                                <a href="#" class="close fileinput-exists" data-dismiss="fileinput">×</a>
                             </div>
-                            <div class="col-xs-12">
-                                <button class="btn btn-primary btn-sm" type="submit">Upload</button>
-                            </div>
+                            <button class="btn btn-success m-l-10" type="submit">Submit</button>
                         </form>
-                    @endif
+                    </div>
                 </div>
-            </div>
+            @endif
         </div>
     </div>
 </div>

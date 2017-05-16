@@ -44,6 +44,28 @@ class StudentControllerPolicy extends BaseControllerPolicy
         return $this->user->hasAccess('student.view') || $this->lecturerService->isLecturer($this->user) || $studentViewSelfProfile;
     }
 
+    protected function getViewBatch($student)
+    {
+        $studentViewSelfProfile = false;
+
+        $student->load('user');
+        if($student->user) {
+            $studentViewSelfProfile = $student->user->id === $this->user->id;
+        }
+
+        return $this->user->hasAccess('student.view') || $this->lecturerService->isLecturer($this->user) || $studentViewSelfProfile;
+    }
+
+    protected function postCreateBatch($student)
+    {
+        return $this->user->hasAccess('student.update') || $this->lecturerService->isLecturer($this->user);
+    }
+
+    protected function postDeleteBatch($student)
+    {
+        return $this->user->hasAccess('student.delete') || $this->lecturerService->isLecturer($this->user);
+    }
+
     protected function getList()
     {
         return $this->lecturerService->isLecturer($this->user) || $this->user->hasAccess('student.list.view');

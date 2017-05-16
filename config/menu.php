@@ -32,7 +32,7 @@ return [
         'name' => 'Students',
         'icon' => 'zmdi zmdi-graduation-cap',
         'permission' => 'students.view',
-        'inurl' => '/students/',
+        'inurl' => '/student/',
         'sub' => [
             'list' => [
                 'name' => 'List',

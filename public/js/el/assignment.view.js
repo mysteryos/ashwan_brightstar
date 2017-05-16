@@ -42,4 +42,14 @@ $(function(){
             },
         }
     });
+
+    $('#assignment_upload_form').on('submit', function(e) {
+        if(document.getElementById("assignmentUploadFile").files.length === 0) {
+            alert('Please select a file before submitting your assignment');
+            e.preventDefault();
+            return false;
+        }
+
+        return true;
+    });
 });

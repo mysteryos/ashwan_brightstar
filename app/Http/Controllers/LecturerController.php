@@ -29,6 +29,11 @@ class LecturerController extends Controller
         $this->middleware('auth');
     }
 
+    /**
+     * GET: List of lecturers
+     *
+     * @return \Illuminate\View\View
+     */
     public function getList()
     {
         //Set Page Title
@@ -48,6 +53,11 @@ class LecturerController extends Controller
         return $this->renderView('lecturer.list');
     }
 
+    /**
+     * GET: Create Lecturer Profile
+     *
+     * @return \Illuminate\View\View
+     */
     public function getCreate()
     {
         //Verify User Access
@@ -63,11 +73,15 @@ class LecturerController extends Controller
         $this->addJqueryValidate();
 
         $this->addJs('/js/el/lecturer.create.js');
+
         return $this->renderView('lecturer.create');
-
-
     }
 
+    /**
+     * POST: Create Lecturer Profile
+     *
+     * @param Request $request
+     */
     public function postCreate(Request $request)
     {
         //Verify User Access
@@ -91,11 +105,59 @@ class LecturerController extends Controller
         $lecturer->save();
     }
 
+    /**
+     * POST: Update Lecturer Profile
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function postUpdate(Request $request)
+    {
+        //Verify User Access
+        $this->verifyAccess();
+
+        //Validate Data from request
+        $this->validateData($request->all(),[
+            'first_name' => 'required|max:255|alpha',
+            'last_name' => 'required|max:255|alpha',
+            'email' => 'email|max:254',
+            'mobile_number' => 'numeric|digits_between:4,15'
+        ]);
+
+        $lecturer = \App\Models\Lecturer::findOrFail((int)$request->input('id'));
+        $lecturer->fill($request->all());
+        $lecturer->save();
+
+        return redirect()->action('LecturerController@getView',['lecturer_id' => $lecturer->id]);
+    }
+
+    /**
+     * GET: View Lecturer Profile
+     *
+     * @param Request $request
+     * @param int $lecturer_id
+     * @return \Illuminate\View\View
+     */
     public function getView(Request $request, $lecturer_id)
     {
+        $lecturer = \App\Models\Lecturer::findOrFail((int)$lecturer_id);
 
+        //Verify User Access
+        $this->verifyAccess();
+
+        //Set Page Title
+        $this->data['pageTitle'] = 'Lecturer - View - '.$lecturer->name;
+
+        $this->data['lecturer'] = $lecturer;
+
+        /*
+         * Assets
+         */
+        $this->addJqueryValidate();
+
+        $this->addJs('/js/el/lecturer.view.js');
+        $this->addCss('/css/el/lecturer.view.css');
+
+        return $this->renderView('lecturer.view');
     }
-    
-
-
 }

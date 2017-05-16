@@ -1,13 +1,13 @@
 <div class="container">
 
-    @include('student.view-header')
+    @include('lecturer.view-header')
 
     <div class="card" id="profile-main">
-        @include('student.view-overview')
+        @include('lecturer.view-overview')
         <div class="pm-body clearfix">
             <ul class="tab-nav tn-justified">
-                <li class="active waves-effect"><a href="{{action('StudentController@getView',['student_id'=>$student->id])}}">About</a></li>
-                <li class="waves-effect"><a href="{{action('StudentController@getViewBatch',['student_id'=>$student->id])}}">Batch</a></li>
+                <li class="active waves-effect"><a href="{{action('LecturerController@getView',['lecturer_id'=>$lecturer->id])}}">About</a></li>
+                {{--<li class="waves-effect"><a href="{{action('LecturerController@getViewBatch',['lecturer_id'=>$lecturer->id])}}">Batch</a></li>--}}
             </ul>
 
             <div class="pmb-block">
@@ -29,29 +29,29 @@
                     </ul>
                 </div>
                 <div class="pmbb-body p-l-30">
-                    <form action="{{action('StudentController@postUpdate')}}" method="post" name="student_personal_info_form" id="student_personal_info_form">
-                        <input type="hidden" name="id" value="{{$student->id}}" />
+                    <form action="{{action('LecturerController@postUpdate')}}" method="post" name="lecturer_personal_info_form" id="lecturer_personal_info_form">
+                        <input type="hidden" name="id" value="{{$lecturer->id}}" />
                         {{csrf_field()}}
                         <div class="pmbb-view">
                             <dl class="dl-horizontal">
                                 <dt>First Name</dt>
-                                <dd>{{$student->first_name}}</dd>
+                                <dd>{{$lecturer->first_name}}</dd>
                             </dl>
                             <dl class="dl-horizontal">
                                 <dt>Last Name</dt>
-                                <dd>{{$student->last_name}}</dd>
+                                <dd>{{$lecturer->last_name}}</dd>
                             </dl>
                             <dl class="dl-horizontal">
                                 <dt>Email</dt>
-                                <dd>{{$student->email}}</dd>
+                                <dd>{{$lecturer->email}}</dd>
                             </dl>
                             <dl class="dl-horizontal">
                                 <dt>Mobile Number</dt>
-                                <dd>{{$student->mobile_number}}</dd>
+                                <dd>{{$lecturer->mobile_number}}</dd>
                             </dl>
                             <dl class="dl-horizontal">
                                 <dt>Address</dt>
-                                <dd>{{$student->address}}</dd>
+                                <dd>{{$lecturer->address}}</dd>
                             </dl>
                         </div>
 
@@ -60,7 +60,7 @@
                                 <dt class="p-t-10 form-label">First Name</dt>
                                 <dd>
                                     <div class="fg-line">
-                                        <input type="text" class="form-control" placeholder="First Name" name="first_name" value="{{$student->first_name}}">
+                                        <input type="text" class="form-control" placeholder="First Name" name="first_name" value="{{$lecturer->first_name}}">
                                     </div>
                                 </dd>
                             </dl>
@@ -69,7 +69,7 @@
                                 <dt class="p-t-10 form-label">Last Name</dt>
                                 <dd>
                                     <div class="fg-line">
-                                        <input type="text" class="form-control" placeholder="Last Name" name="last_name" value="{{$student->last_name}}">
+                                        <input type="text" class="form-control" placeholder="Last Name" name="last_name" value="{{$lecturer->last_name}}">
                                     </div>
                                 </dd>
                             </dl>
@@ -78,7 +78,7 @@
                                 <dt class="p-t-10 form-label">Email</dt>
                                 <dd>
                                     <div class="fg-line">
-                                        <input type="text" class="form-control" placeholder="Email" name="email" value="{{$student->email}}">
+                                        <input type="text" class="form-control" placeholder="Email" name="email" value="{{$lecturer->email}}">
                                     </div>
                                 </dd>
                             </dl>
@@ -87,7 +87,7 @@
                                 <dt class="p-t-10 form-label">Mobile Number</dt>
                                 <dd>
                                     <div class="fg-line">
-                                        <input type="text" class="form-control" placeholder="Mobile Number" name="mobile_number" value="{{$student->mobile_number}}">
+                                        <input type="text" class="form-control" placeholder="Mobile Number" name="mobile_number" value="{{$lecturer->mobile_number}}">
                                     </div>
                                 </dd>
                             </dl>
@@ -96,7 +96,7 @@
                                 <dt class="p-t-10 form-label">Address</dt>
                                 <dd>
                                     <div class="fg-line">
-                                        <input type="text" class="form-control" placeholder="Address" name="address" value="{{$student->address}}">
+                                        <input type="text" class="form-control" placeholder="Address" name="address" value="{{$lecturer->address}}">
                                     </div>
                                 </dd>
                             </dl>
