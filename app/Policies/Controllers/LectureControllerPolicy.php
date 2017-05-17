@@ -27,6 +27,7 @@ class LectureControllerPolicy extends BaseControllerPolicy
     {
         return $this->user->hasAccess('lecture.create');
     }
+
     protected function postUpdate()
     {
         return $this->user->hasAccess('lecture.update');
@@ -60,6 +61,11 @@ class LectureControllerPolicy extends BaseControllerPolicy
     protected function getList()
     {
         return $this->user->hasAccess('lecture.list.view') || $this->lecturerService->isLecturer($this->user);
+    }
+
+    protected function postDelete()
+    {
+        return $this->user->hasAccess('lecture.delete');
     }
 }
 

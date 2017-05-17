@@ -30,10 +30,13 @@ class LectureController extends Controller
          */
 
         $this->middleware('auth');
-
-        $this->studentService = app('App\Services\Student');
     }
 
+    /**
+     * GET: List of lectures
+     *
+     * @return \Illuminate\View\View
+     */
     public function getList()
     {
         //Verify User Access
@@ -41,8 +44,6 @@ class LectureController extends Controller
 
         //Set Page Title
         $this->data['pageTitle'] = 'Lecture - List';
-
-        //Set Data
 
         //If user is a student
         if($this->studentService->isStudent($this->user)) {
@@ -65,7 +66,7 @@ class LectureController extends Controller
 
 
         //Permissions
-        $this->data['can_create_lecture'] = true;
+        $this->data['hasCreateAccess'] = $this->hasAccess('lecture.create');
 
         //Assets
         $this->addjQueryBootgrid();
@@ -75,6 +76,11 @@ class LectureController extends Controller
         return $this->renderView('lecture.list');
     }
 
+    /**
+     * GET: Create Lecture
+     *
+     * @return \Illuminate\View\View
+     */
     public function getCreate()
     {
         //Verify User Access
@@ -83,43 +89,46 @@ class LectureController extends Controller
         //Set Page Title
         $this->data['pageTitle'] = 'Lecture - Create';
 
-        //Permissions
-        $this->data['can_create_lecture'] = true;
-
         //Course List
         $this->data['course_list'] = \App\Models\Course::orderBy('name', 'ASC')->get();
 
         //Assets
         $this->addJqueryValidate();
+        $this->addSummerNote();
 
         $this->addJs('/js/el/lecture.create.js');
-        return $this->renderView('lecture.create');
 
+        return $this->renderView('lecture.create');
     }
 
-
+    /**
+     * POST: Create Lecture
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function postCreate(Request $request)
     {
-
         //Verify User Access
         $this->verifyAccess();
 
         //Validate Data from request
         $this->validateData($request->all(),[
-            'first_name' => 'required|max:255|alpha',
-            'last_name' => 'required|max:255|alpha',
-            'email' => 'email|max:254',
-            'mobile_number' => 'numeric|digits_between:4,15'
+            'name' => 'required|max:255',
+            'description' => 'required',
+            'course_id' => 'required|exists:course,id,deleted_at,NULL',
         ]);
 
-        //Create New Lecturer
-        $lecturer = new \App\Models\Lecturer();
+        //Create New Lecture
+        $lecture = new \App\Models\Lecture();
         //Fill in information from request
-        $lecturer->fill($request->all());
-        //Set creator user id to user currently logged in
-        $lecturer->creator_user_id = $this->user->id;
+        $lecture->fill($request->all());
+        //Set creator to user currently logged in
+        $lecture->creator()->associate($this->user);
         //Save to database
-        $lecturer->save();
+        $lecture->save();
+
+        return redirect()->action('LectureController@getView',[$lecture->id]);
     }
 
     /**
@@ -135,13 +144,12 @@ class LectureController extends Controller
 
         //Validate Data from request
         $this->validateData($request->all(),[
-            'id' => 'required|max:5|alpha',
-            'name' => 'required|max:255|alpha',
-            'description' => 'description|max:254',
-            'course_id' => 'required|max:5|alpha',
+            'name' => 'required|max:255',
+            'description' => 'required',
+            'course_id' => 'required|exists:course,id,deleted_at,NULL',
         ]);
 
-        $lecture = \App\Models\Lecture::findOrFail($request->get('id'));
+        $lecture = \App\Models\Lecture::findOrFail((int)$request->get('id'));
 
         //Fill in information from request
         $lecture->fill($request->all());
@@ -165,39 +173,47 @@ class LectureController extends Controller
         //Verify User Access
         $this->verifyAccess($lecture);
 
-        //If user is a student
-        if($this->studentService->isStudent($this->user)) {
-            $studentProfile = \App\Models\Student::where('user_id','=',$this->user->id)->first();
-
-            $this->data['lecture_list'] = \App\Models\Lecture::orderBy('updated_at', 'DESC')
-                ->with('course')
-                ->whereHas('course',function($q) use($studentProfile){
-                    return $q->whereHas('batch', function($q) use($studentProfile) {
-                        return $q->whereHas('student', function($q) use ($studentProfile) {
-                            return $q->where('student_id','=',$studentProfile->id);
-                        });
-                    });
-                })
-                ->get();
-        } else {
-            //Is a lecturer or admin
-            $this->data['lecture_list'] = \App\Models\Lecture::orderBy('updated_at', 'DESC')->with('course')->get();
-        }
-
         //Set Page Title
         $this->data['pageTitle'] = 'Lecture - View - '.$lecture->name;
 
         $this->data['lecture'] = $lecture;
 
+        $this->data['hasUpdateAccess'] = $this->hasAccess('lecture.update');
+        $this->data['hasDeleteAccess'] = $this->hasAccess('lecture.delete');
+
+        if($this->data['hasUpdateAccess']) {
+            $this->data['course_list'] = \App\Models\Course::orderBy('name','ASC')->get();
+        }
+
         /*
          * Assets
          */
         $this->addJqueryValidate();
+        $this->addSummerNote();
 
         $this->addJs('/js/el/lecture.view.js');
         $this->addCss('/css/el/lecture.view.css');
 
         return $this->renderView('lecture.view');
+    }
+
+    /**
+     * POST: Delete Lecture
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function postDelete(Request $request)
+    {
+        $this->verifyAccess();
+
+        $lecture = \App\Models\Lecture::findOrFail(\Crypt::decrypt($request->input('id')));
+
+        $lecture->delete();
+
+        return redirect()->action('LectureController@getList')->with([
+            'messages' => "Lecture ID: {$lecture->id} has been successfully delete"
+        ]);
     }
 
 }

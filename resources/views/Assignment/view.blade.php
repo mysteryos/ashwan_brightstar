@@ -122,7 +122,18 @@
             @if($assignment->isActive() && $isStudent)
                 <div class="pmb-block">
                     <div class="pmbb-header">
-                        <h2>@if(!$hasSubmitted)<i class="zmdi zmdi-upload m-r-5"></i> Submit your assignment: @else<i class="zmdi zmdi-check-circle m-r-5"></i>  You have already submitted your assigment @endif</h2>
+                        <h2>
+                            @if(!$hasSubmitted)
+                                <i class="zmdi zmdi-upload m-r-5"></i> Submit your assignment:
+                            @else
+                                <i class="zmdi zmdi-check-circle m-r-5"></i>  You have already submitted your assigment.
+                                @if($studentSubmission)
+                                    <a class="m-l-5" target="_blank" href="{{action('AssignmentController@getFile',['file_id'=>$studentSubmission->id])}}">Click here to view</a>
+                                @else
+                                    <span class="m-l-5">However, we can't find your file on our system. Please contact an administrator with the file ID: {{$studentSubmission->id}}</span>
+                                @endif
+                            @endif
+                        </h2>
                     </div>
                     @if(!$hasSubmitted)
                         <div class="pmbb-body p-l-30">

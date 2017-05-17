@@ -31,4 +31,9 @@ class LecturerControllerPolicy extends BaseControllerPolicy
         return $this->user->hasAccess('lecturer.update');
     }
 
+    protected function getList()
+    {
+        return $this->user->hasAccess('lecturer.list.view') ;
+    }
+
 }

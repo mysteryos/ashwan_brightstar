@@ -39,7 +39,7 @@ class BatchController extends Controller
         $this->data['pageTitle'] = 'Batch - List';
 
         //Set Data
-        $this->data['batch_list'] = \App\Models\Batch::orderBy('updated_at','DESC')->get();
+        $this->data['batch_list'] = \App\Models\Batch::with('course')->orderBy('updated_at','DESC')->get();
 
         //Permissions
         $this->data['can_create_batch'] = true;

@@ -31,6 +31,11 @@ class StudentController extends Controller
         $this->middleware('auth');
     }
 
+    /**
+     * GET: List of students
+     *
+     * @return \Illuminate\View\View
+     */
     public function getList()
     {
         $this->verifyAccess();
@@ -52,6 +57,11 @@ class StudentController extends Controller
         return $this->renderView('student.list');
     }
 
+    /**
+     * GET: Create Student Profile
+     *
+     * @return \Illuminate\View\View
+     */
     public function getCreate()
     {
         //Verify User Access
@@ -70,6 +80,12 @@ class StudentController extends Controller
         return $this->renderView('student.create');
     }
 
+    /**
+     * POST: Create Student
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function postCreate(Request $request)
     {
         //Verify User Access
@@ -155,6 +171,12 @@ class StudentController extends Controller
         return $this->renderView('student.view');
     }
 
+    /**
+     * GET: List of batch student is enrolled in
+     *
+     * @param $student_id
+     * @return \Illuminate\View\View
+     */
     public function getViewBatch($student_id)
     {
         $student = \App\Models\Student::with('batch')->findOrFail((int)$student_id);

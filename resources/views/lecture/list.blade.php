@@ -3,7 +3,7 @@
     <div class="block-header">
         <h2 class="pull-left">Lecture - List</h2>
         <div class="pull-right">
-            @if($can_create_lecture)
+            @if($hasCreateAccess)
                 <a href="{{action('LectureController@getCreate')}}" class="btn btn-link">
                     <i class="zmdi zmdi-plus"></i> Create
                 </a>
@@ -22,7 +22,6 @@
                     <tr>
                         <th data-column-id="id" data-type="numeric">ID</th>
                         <th data-column-id="name" > Name</th>
-                        <th data-column-id="description">Description</th>
                         <th data-column-id="course">Course</th>
 
                         @if($isSuperAdmin)
@@ -37,7 +36,6 @@
                     <tr class="lecture-row">
                         <td>{{$lecture_row->id}}</td>
                         <td>{{$lecture_row->name}}</td>
-                        <td>{{$lecture_row->description}}</td>
                         <td>@if($lecture_row->course){{$lecture_row->course->name}}@endif</td>
 
                         @if($isSuperAdmin)

@@ -23,6 +23,7 @@
                     <tr>
                         <th data-column-id="id" data-type="numeric">ID</th>
                         <th data-column-id="name" >Name</th>
+                        <th data-column-id="course">Course</th>
                         <th data-column-id="start_date">Start Date</th>
 
                         @if($isSuperAdmin)
@@ -37,6 +38,7 @@
                     <tr class="batch-row">
                         <td>{{$batch_row->id}}</td>
                         <td>{{$batch_row->name}}</td>
+                        <td>@if($batch_row->course){{$batch_row->course->name}}@endif</td>
                         <td>{{$batch_row->start_date}}</td>
 
                         @if($isSuperAdmin)

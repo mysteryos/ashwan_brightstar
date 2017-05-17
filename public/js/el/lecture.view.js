@@ -16,33 +16,41 @@ $(function(){
         }
     });
 
-    $.validator.addMethod("lettersonly", function(value, element) {
-        return this.optional(element) || /^[a-z ]+$/i.test(value);
-    }, "Letters only please");
 
     //Validate
-    $('#assignment_create_form').validate({
+    $('#lecture_info_form').validate({
         rules: {
-            id: {
-                required: true,
-                maxlength: 5,
-                digitsonly: true
-            },
             name: {
                 required: true,
-                maxlength: 255,
-                lettersonly: true
+                maxlength: 255
             },
             description: {
-                description: true,
-                maxlength: 254
+                required: true
             },
             course_id: {
-                required: true,
-                maxlength: 5,
-                digitsonly: true
+                required: true
             }
+        },
+        submitHandler: function(form) {
+            return form.valid();
         }
+    });
+
+    $('#inputDescription').summernote({
+        toolbar: [
+            ['style', ['bold', 'italic', 'underline', 'clear']],
+            ['fontsize', ['fontsize']],
+            ['color', ['color']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['insert',['link']]
+        ],
+        disableDragAndDrop: true,
+        minHeight: 500
+    });
+
+    //Delete Main
+    $('.delete_form').on('submit', function(e){
+        return confirm("Are you sure you wish to delete this resource?");
     });
 });
 

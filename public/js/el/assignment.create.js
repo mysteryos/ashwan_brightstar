@@ -14,10 +14,6 @@ $(function(){
         }
     });
 
-    $.validator.addMethod("lettersonly", function(value, element) {
-        return this.optional(element) || /^[a-z ]+$/i.test(value);
-    }, "Letters only please");
-
     $.validator.addMethod("greaterThanToday", function(value, element, params) {
 
         if (!/Invalid|NaN/.test(new Date(value))) {

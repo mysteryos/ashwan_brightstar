@@ -36,6 +36,8 @@ class LecturerController extends Controller
      */
     public function getList()
     {
+        $this->verifyAccess();
+
         //Set Page Title
         $this->data['pageTitle'] = 'Lecturer - List';
 
@@ -81,6 +83,7 @@ class LecturerController extends Controller
      * POST: Create Lecturer Profile
      *
      * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function postCreate(Request $request)
     {
@@ -100,9 +103,11 @@ class LecturerController extends Controller
         //Fill in information from request
         $lecturer->fill($request->all());
         //Set creator user id to user currently logged in
-        $lecturer->creator_user_id = $this->user->id;
+        $lecturer->creator()->associate($this->user);
         //Save to database
         $lecturer->save();
+
+        return redirect()->action('LecturerController@getView',['lecturer_id' => $lecturer->id]);
     }
 
     /**
@@ -118,8 +123,8 @@ class LecturerController extends Controller
 
         //Validate Data from request
         $this->validateData($request->all(),[
-            'first_name' => 'required|max:255|alpha',
-            'last_name' => 'required|max:255|alpha',
+            'first_name' => 'required|max:255|alpha_spaces',
+            'last_name' => 'required|max:255|alpha_spaces',
             'email' => 'email|max:254',
             'mobile_number' => 'numeric|digits_between:4,15'
         ]);

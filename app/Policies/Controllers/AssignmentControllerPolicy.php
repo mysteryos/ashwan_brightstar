@@ -92,5 +92,14 @@ class AssignmentControllerPolicy extends BaseControllerPolicy
         return $this->lecturerService->isLecturer($this->user) || $this->hasAccess('assignment.delete');
     }
 
-
+    protected function getFile($file)
+    {
+        //Lecturer or permission access
+        if($this->lecturerService->isLecturer($this->user) || $this->hasAcces('assignment.file.view')) {
+            return true;
+        } else {
+            //If is creator of file, give access
+            return $file->creator_user_id === $this->user->id;
+        }
+    }
 }

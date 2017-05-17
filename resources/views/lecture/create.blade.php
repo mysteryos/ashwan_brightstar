@@ -6,35 +6,16 @@
         <form class="form-horizontal" method="POST" action="{{action('LectureController@postCreate')}}" id="lecture_create_form">
             {{csrf_field()}}
             <div class="card-body card-padding">
-                <h3><i class="zmdi zmdi-account m-r-5"></i>  Info</h3>
+                <h3><i class="zmdi zmdi-account m-r-5"></i> Info</h3>
+
                 <div class="form-group">
                     <label class="col-sm-2 control-label" for="inputName">Name*</label>
                     <div class="col-sm-10">
                         <div class="fg-line">
-                            <input name="name" type="text" placeholder="Name" id="inputName" class="form-control input-sm" value="{{old('name')}}">
+                            <input autofocus name="name" type="text" placeholder="Name" id="inputName" class="form-control input-sm" value="{{old('name')}}">
                         </div>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label class="col-sm-2 control-label" for="inputDescription">Description*</label>
-                    <div class="col-sm-10">
-                        <div class="fg-line">
-                            <input name="description" type="text" placeholder="Description" id="inputDescription" class="form-control input-sm" value="{{old('description')}}">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label class="col-sm-2 control-label" for="inputDescription">ID*</label>
-                    <div class="col-sm-10">
-                        <div class="fg-line">
-                            <input name="LectureID" type="text" placeholder="LectureID" id="inputLectureID" class="form-control input-sm" value="{{old('lecture_id')}}">
-                        </div>
-                    </div>
-                </div>
-
-
-
 
                 <div class="form-group">
                     <label class="col-sm-2 control-label" for="inputCourseId">Course*</label>
@@ -50,7 +31,16 @@
                             </div>
                         </div>
                     </div>
-                </div>                
+                </div>
+
+                <div class="form-group">
+                    <label class="col-sm-2 control-label" for="inputDescription">Description*</label>
+                    <div class="col-sm-10">
+                        <div class="fg-line">
+                            <textarea name="description" id="inputDescription">{{old('description')}}</textarea>
+                        </div>
+                    </div>
+                </div>
 
                 <div class="form-group">
                     <div class="col-sm-offset-2 col-sm-10">

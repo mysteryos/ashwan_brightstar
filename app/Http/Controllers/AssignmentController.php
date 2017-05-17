@@ -13,6 +13,7 @@ use App\Traits\VendorLibraries;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\File\Exception\AccessDeniedException;
 use \Carbon\Carbon;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class AssignmentController extends Controller
 {
@@ -31,18 +32,42 @@ class AssignmentController extends Controller
          */
 
         $this->middleware('auth');
-
-        $this->studentService = app('App\Services\Student');
-        $this->lecturerService = app('App\Services\Lecturer');
     }
 
     public function getList()
     {
         //Set Page Title
         $this->data['pageTitle'] = 'Assignment - List';
-
+        $this->data['isStudent'] = $this->studentService->isStudent($this->user);
         //Set Data
-        $this->data['assignment_list'] = \App\Models\Assignment::with('lecture')->orderBy('updated_at','DESC')->get();
+        if($this->data['isStudent']) {
+            $assignmentList = \App\Models\Assignment::with('lecture','submissions')
+                                                ->whereHas('lecture', function($q) {
+                                                    return $q->whereHas('course', function($q) {
+                                                        return $q->whereHas('batch', function($q) {
+                                                            return $q->whereHas('student', function($q) {
+                                                                return $q->whereHas('user', function($q) {
+                                                                    return $q->where('id','=',$this->user->id);
+                                                                });
+                                                            });
+                                                        });
+                                                    });
+                                                })
+                                                ->orderBy('updated_at','DESC')
+                                                ->get();
+            $this->user->load('student');
+            $student = $this->user->student;
+            $this->data['assignment_list'] = $assignmentList->map(function($row) use ($student) {
+                $row->isSubmitted = count($row->submissions->filter(function($row) use ($student)  {
+                    return $row->student_id === $student->id;
+                })) > 0;
+                return $row;
+            });
+        } else {
+            //Admin or lecturer
+            $this->data['assignment_list'] = \App\Models\Assignment::with('lecture')->orderBy('updated_at','DESC')->get();
+        }
+
 
         //Permissions
         $this->data['can_create_assignment'] = true;
@@ -55,6 +80,11 @@ class AssignmentController extends Controller
         return $this->renderView('assignment.list');
     }
 
+    /**
+     * GET: Create Assignment
+     *
+     * @return \Illuminate\View\View
+     */
     public function getCreate()
     {
         //Verify User Access
@@ -80,6 +110,12 @@ class AssignmentController extends Controller
 
     }
 
+    /**
+     * POST: Create Assignment
+     *
+     * @param Request $request
+     * @return $this|\Illuminate\Http\RedirectResponse
+     */
     public function postCreate(Request $request)
     {
         //Verify User Access
@@ -223,6 +259,33 @@ class AssignmentController extends Controller
     }
 
     /**
+     * GET: File in submission to assignment
+     *
+     * @param int $file_id
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+     */
+    public function getFile($file_id)
+    {
+        $file = \App\Models\File::findOrFail($file_id);
+
+        $this->verifyAccess($file->id);
+
+        $exists = \Storage::has($file->path);
+
+        if($exists) {
+            $content = \Storage::get($file->path);
+            //Remove white space to prevent files from getting corrupted - ref: http://stackoverflow.com/questions/39329299/laravel-file-downloaded-from-storage-folder-gets-corrupted
+            ob_end_clean();
+            return response($content, 200, [
+                'Content-Type' => $file->mime,
+                'Content-Disposition' => 'attachment; filename="'.$file->name.'"',
+            ]);
+        } else {
+            throw new NotFoundHttpException("File ID: {$file->id} not found on the system");
+        }
+    }
+
+    /**
      * GET: View Assignment
      *
      * @param int $assignment_id
@@ -249,6 +312,17 @@ class AssignmentController extends Controller
             $this->data['hasSubmitted'] = \App\Models\AssignmentStudents::where('student_id','=',$this->user->student->id)
                                             ->where('assignment_id','=',$assignment->id)
                                             ->count() > 0;
+            if($this->data['hasSubmitted']) {
+                $studentSubmission = \App\Models\AssignmentStudents::where('student_id','=',$this->user->student->id)
+                                    ->where('assignment_id','=',$assignment->id)
+                                    ->with('file')
+                                    ->first();
+                if($studentSubmission->file) {
+                    $this->data['studentSubmission'] = $studentSubmission->file;
+                } else {
+                    $this->data['studentSubmission'] = false;
+                }
+            }
         }
 
         //Permissions
