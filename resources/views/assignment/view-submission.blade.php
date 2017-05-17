@@ -12,7 +12,7 @@
 
             <div class="pmb-block">
                 <div class="pmbb-body p-l-30">
-                    @if(count($assignment->subsmissions))
+                    @if(count($assignment->submissions))
                         <table id="data-table" class="table table-striped table-vmiddle">
                             <thead>
                                 <th>ID</th>
@@ -30,14 +30,23 @@
                                             @if($row->student){{$row->student->name}}@else{{"(Student Profile Missing)"}}}@endif
                                         </td>
                                         <td>
-                                            @if($row->file){{$row->file>name}}@else{{"(File Missing)"}}@endif
+                                            @if($row->file)
+                                                <a href="{{action('AssignmentController@getFile',['file_id'=>$row->file->id])}}" target="_blank">
+                                                    {{$row->file->name}}
+                                                </a>
+                                            @else
+                                                {{"(File Missing)"}}
+                                            @endif
                                         </td>
                                         <td>
-                                            @if($row->created_at){{$row->created_at->format('Y-m-d')}}@endif
+                                            @if($row->created_at)
+                                                {{$row->created_at->format('Y-m-d')}}
+                                            @endif
                                         </td>
                                         @if($hasDeleteAccess)
                                             <td>
-                                                <form action="{{action('AssignmentController@postDeleteSubmission')}}" class="delete_form">
+                                                <form method="post" action="{{action('AssignmentController@postDeleteSubmission')}}" class="delete_form">
+                                                    {{csrf_field()}}
                                                     <input type="hidden" name="id" value="{{\Crypt::encrypt($assignment->id)}}" />
                                                     <input type="hidden" name="submission_id"  value="{{\Crypt::encrypt($row->id)}}" />
                                                     <button class="btn btn-sm btn-danger btn-delete-submission col-xs-12" type="submit" title="Delete Submission" data-id="{{$row->id}}"><i class="zmdi zmdi-delete"></i></button>

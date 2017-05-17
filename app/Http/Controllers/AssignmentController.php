@@ -367,7 +367,7 @@ class AssignmentController extends Controller
 
         $this->data['hasDeleteAccess'] = $this->hasAccess('assignment.delete') || $this->lecturerService->isLecturer($this->user);
 
-        $this->addJs('/js/es/assignment.view_submission.js');
+        $this->addJs('/js/el/assignment.view_submission.js');
 
         return $this->renderView('assignment.view-submission');
     }
@@ -407,7 +407,7 @@ class AssignmentController extends Controller
 
         $assignment_student = \App\Models\AssignmentStudents::findOrFail(\Crypt::decrypt($request->input('submission_id')));
 
-        $assignment->submissions()->detach($assignment_student);
+        $assignment_student->delete();
 
         return redirect()->back()->with([
             'messages' => "Submission ID: {$assignment_student->id} has been successfully deleted"

@@ -92,6 +92,11 @@ class AssignmentControllerPolicy extends BaseControllerPolicy
         return $this->lecturerService->isLecturer($this->user) || $this->hasAccess('assignment.delete');
     }
 
+    protected function postDeleteSubmission()
+    {
+        return $this->lecturerService->isLecturer($this->user) || $this->hasAccess('assignment.submission.delete');
+    }
+
     protected function getFile($file)
     {
         //Lecturer or permission access
