@@ -41,7 +41,7 @@ $(function(){
                 required: true,
                 maxlength: 5,
                 digitsonly: true
-            },
+            }
         }
     });
 });

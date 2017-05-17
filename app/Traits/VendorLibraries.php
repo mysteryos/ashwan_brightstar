@@ -93,4 +93,11 @@ trait VendorLibraries
         $this->addJs('/vendors/fileinput/fileinput.min.js');
     }
 
+    public function addSummerNote()
+    {
+        $this->addCss('/vendors/summernote/dist/summernote.css');
+
+        $this->addJs('/vendors/summernote/dist/summernote.min.js');
+    }
+
 }

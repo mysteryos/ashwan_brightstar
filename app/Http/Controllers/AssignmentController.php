@@ -12,7 +12,7 @@ use App\Exceptions\HttpExceptionWithError;
 use App\Traits\VendorLibraries;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\File\Exception\AccessDeniedException;
-
+use \Carbon\Carbon;
 
 class AssignmentController extends Controller
 {
@@ -33,6 +33,7 @@ class AssignmentController extends Controller
         $this->middleware('auth');
 
         $this->studentService = app('App\Services\Student');
+        $this->lecturerService = app('App\Services\Lecturer');
     }
 
     public function getList()
@@ -66,17 +67,18 @@ class AssignmentController extends Controller
         $this->data['can_create_assignment'] = true;
 
         //Assignment List
-        $this->data['assignment_list'] = \App\Models\Assignment::orderBy('name','ASC')->get();
+        $this->data['lecture_list'] = \App\Models\Lecture::orderBy('name','ASC')->get();
+
         //Assets
         $this->addJqueryValidate();
         $this->addMoment();
         $this->addBootstrapDatetimePicker();
+        $this->addSummerNote();
 
         $this->addJs('/js/el/assignment.create.js');
         return $this->renderView('assignment.create');
 
     }
-
 
     public function postCreate(Request $request)
     {
@@ -85,21 +87,32 @@ class AssignmentController extends Controller
 
         //Validate Data from request
         $this->validateData($request->all(),[
-            'id' => 'required|max:5|alpha',
-            'name' => 'required|max:255|alpha',
-            'description' => 'description|max:254',
-            'lecture_id' => 'numeric|max:5|alpha',
-            'submission_date' => 'timestamp'
+            'name' => 'required|max:255',
+            'description' => 'required',
+            'lecture_id' => 'required|exists:lecture,id,deleted_at,NULL',
+            'submission_date' => 'required|date_format:Y-m-d'
         ]);
+
+        //Validate Date
+        if(Carbon::createFromFormat('Y-m-d',$request->input('submission_date'))->diffIndays(Carbon::now(),false) >=0) {
+            return redirect()->back()->withInput()->withErrors([
+                'Submission date must be greater than today'
+            ]);
+        }
 
         //Create New Assignment
         $assignment = new \App\Models\Assignment();
         //Fill in information from request
         $assignment->fill($request->all());
+        //Add lecture
+        $lecture = \App\Models\Lecture::findOrFail($request->input('lecture_id'));
+        $assignment->lecture()->associate($lecture);
         //Set creator user id to user currently logged in
-        $assignment->creator_user_id = $this->user->id;
+        $assignment->creator()->associate($this->user);
         //Save to database
         $assignment->save();
+
+        return redirect()->action('AssignmentController@getView',$assignment->id);
     }
 
     /**
@@ -115,17 +128,28 @@ class AssignmentController extends Controller
 
         //Validate Data from request
         $this->validateData($request->all(),[
-            'id' => 'required|max:5|alpha',
-            'name' => 'required|max:255|alpha',
-            'description' => 'description|max:254',
-            'lecture_id' => 'numeric|max:5|alpha',
-            'submission_date' => 'timestamp'
+            'name' => 'required|max:255',
+            'description' => 'required',
+            'lecture_id' => 'required|exists:lecture,id,deleted_at,NULL',
+            'submission_date' => 'required|date_format:Y-m-d'
         ]);
 
+        //Validate Date
+        if(Carbon::createFromFormat('Y-m-d',$request->input('submission_date'))->diffIndays(Carbon::now(),false) >=0) {
+            return redirect()->back()->withInput()->withErrors([
+                'Submission date must be greater than today'
+            ]);
+        }
+
+        //Get Info From DB
         $assignment = \App\Models\Assignment::findOrFail($request->get('id'));
 
         //Fill in information from request
         $assignment->fill($request->all());
+
+        //Add lecture
+        $lecture = \App\Models\Lecture::findOrFail($request->input('lecture_id'));
+        $assignment->lecture()->associate($lecture);
 
         //Save to database
         $assignment->save();
@@ -135,18 +159,13 @@ class AssignmentController extends Controller
 
     public function postUpload(Request $request)
     {
-        $this->verifyAccess();
+        $assignment = \App\Models\Assignment::findOrFail($request->get('id'));
 
-
-        //@TODO: Block by file mime types
-        $this->validateData($request->all(), [
-            'id' => 'exists:assignment,id'
-        ]);
+        $this->verifyAccess($assignment->id);
 
         $file = $request->file('file');
 
         if($file->isValid()) {
-            $assignment = \App\Models\Assignment::findOrFail($request->get('id'));
 
             //If assignment is still active, allow submission
             if($assignment->isActive()) {
@@ -154,6 +173,7 @@ class AssignmentController extends Controller
                 //Get Student Profile
                 $student = $this->user->student;
                 if($student) {
+
                     /*
                      * Save file to disk
                      */
@@ -210,7 +230,7 @@ class AssignmentController extends Controller
      */
     public function getView($assignment_id)
     {
-        $assignment = \App\Models\Assignment::findOrFail((int)$assignment_id);
+        $assignment = \App\Models\Assignment::with('lecture')->findOrFail((int)$assignment_id);
 
         //Verify User Access
         $this->verifyAccess($assignment_id);
@@ -231,20 +251,93 @@ class AssignmentController extends Controller
                                             ->count() > 0;
         }
 
+        //Permissions
+        $this->data['hasUpdateAccess'] = $this->hasAccess('assignment.update') || $this->lecturerService->isLecturer($this->user);
+        $this->data['hasDeleteAccess'] = $this->hasAccess('assignment.delete') || $this->lecturerService->isLecturer($this->user);
+
+        if($this->data['hasUpdateAccess']) {
+            $this->data['lectureList'] = \App\Models\Lecture::orderBy('name','ASC')
+                                            ->get();
+        }
+
         /*
          * Assets
          */
         $this->addJqueryValidate();
+        $this->addMoment();
+        $this->addBootstrapDatetimePicker();
         $this->addFileInput();
-
+        $this->addSummerNote();
         $this->addJs('/js/el/assignment.view.js');
 
         return $this->renderView('assignment.view');
     }
 
-    public function getViewSubmission()
+    /**
+     * GET: View Submission
+     *
+     * @param $assignment_id
+     * @return \Illuminate\View\View
+     */
+    public function getViewSubmission($assignment_id)
     {
+        $assignment = \App\Models\Assignment::with('submissions','submissions.file','submissions.student')->findOrFail((int)$assignment_id);
 
+        //Verify User Access
+        $this->verifyAccess();
+
+        //Set Page Title
+        $this->data['pageTitle'] = 'Assignment - View Submissions - '.$assignment->name;
+
+        $this->data['assignment'] = $assignment;
+
+        $this->data['hasDeleteAccess'] = $this->hasAccess('assignment.delete') || $this->lecturerService->isLecturer($this->user);
+
+        $this->addJs('/js/es/assignment.view_submission.js');
+
+        return $this->renderView('assignment.view-submission');
+    }
+
+    /**
+     * POST: Delete Assignment
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function postDelete(Request $request)
+    {
+        $assignment = \App\Models\Assignment::findOrFail(\Crypt::decrypt($request->input('id')));
+
+        //Verify User Access
+        $this->verifyAccess();
+
+        $assignment->delete();
+
+        return redirect()->action('AssignmentController@getList')->with([
+            'messages' => "Assignment ID: {$assignment->id} has been successfully deleted"
+        ]);
+    }
+
+    /**
+     * POST: Delete Submission
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function postDeleteSubmission(Request $request)
+    {
+        $assignment = \App\Models\Assignment::findOrFail(\Crypt::decrypt($request->input('id')));
+
+        //Verify User Access
+        $this->verifyAccess();
+
+        $assignment_student = \App\Models\AssignmentStudents::findOrFail(\Crypt::decrypt($request->input('submission_id')));
+
+        $assignment->submissions()->detach($assignment_student);
+
+        return redirect()->back()->with([
+            'messages' => "Submission ID: {$assignment_student->id} has been successfully deleted"
+        ]);
     }
 
 }

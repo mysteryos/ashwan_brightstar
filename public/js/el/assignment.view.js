@@ -20,27 +20,68 @@ $(function(){
         return this.optional(element) || /^[a-z ]+$/i.test(value);
     }, "Letters only please");
 
+    $.validator.addMethod("greaterThanToday", function(value, element, params) {
+
+        if (!/Invalid|NaN/.test(new Date(value))) {
+            return new Date(value) > new Date();
+        }
+    },'Must be greater than '+moment().format('YYYY-MM-DD'));
+
     //Validate
     $('#assignment_create_form').validate({
         rules: {
-            id: {
-                required: true,
-                maxlength: 5,
-                digitsonly: true
-            },
             name: {
                 required: true,
-                maxlength: 255,
-                lettersonly: true
+                maxlength: 255
             },
             description: {
-                description: true,
-                maxlength: 254
-            },
-            submission_date: {
                 required: true
             },
+            lecture_id: {
+                required: true
+            },
+            submission_date: {
+                required: true,
+                greaterThanToday: true
+            }
+        },
+        submitHandler: function(form) {
+            return form.valid();
         }
+    });
+
+    $('#inputSubmissionDate').datetimepicker({
+        format: 'YYYY-MM-DD',
+        useCurrent: false,
+        disabledDates: [
+            moment('2017-01-01'),
+            moment('2017-01-02'),
+            moment('2017-01-28'),
+            moment('2017-02-01'),
+            moment('2017-02-09'),
+            moment('2017-02-24'),
+            moment('2017-03-12'),
+            moment('2017-03-29'),
+            moment('2017-05-01'),
+            moment('2017-06-26'),
+            moment('2017-08-26'),
+            moment('2017-10-19'),
+            moment('2017-11-01'),
+            moment('2017-11-02'),
+            moment('2017-12-25')
+        ]
+    });
+
+    $('#inputDescription').summernote({
+        toolbar: [
+            ['style', ['bold', 'italic', 'underline', 'clear']],
+            ['fontsize', ['fontsize']],
+            ['color', ['color']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['insert',['link']]
+        ],
+        disableDragAndDrop: true,
+        minHeight: 500
     });
 
     $('#assignment_upload_form').on('submit', function(e) {
@@ -52,4 +93,9 @@ $(function(){
 
         return true;
     });
+
+    //Delete Main
+    $('.delete_form').on('submit', function(e){
+        return confirm("Are you sure you wish to delete this resource?");
+    })
 });

@@ -200,7 +200,10 @@ class BatchController extends Controller
             return $row->id;
         });
 
-        $this->data['student_list'] = \App\Models\Student::whereNotIn('id',$studentIds)->get();
+        $this->data['student_list'] = \App\Models\Student::whereNotIn('id',$studentIds)
+                                        ->orderBy('last_name','ASC')
+                                        ->orderBy('first_name','ASC')
+                                        ->get();
 
         $this->addJs('/js/el/batch.view_student.js');
 

@@ -17,17 +17,16 @@ class Assignment extends \Eloquent
 
     protected $table = 'assignment';
 
-
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'id',
         'name',
         'description',
-        'submission_date'
+        'submission_date',
+        'lecture_id'
     ];
 
     protected $dates = [

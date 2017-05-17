@@ -21,24 +21,23 @@ class AssignmentControllerPolicy extends BaseControllerPolicy
 
     protected function getCreate()
     {
-        return $this->user->hasAccess('assignment.create');
+        return $this->user->hasAccess('assignment.create') || $this->lecturerService->isLecturer($this->user);;
     }
 
     protected function postCreate()
     {
-        return $this->user->hasAccess('assignment.create');
+        return $this->user->hasAccess('assignment.create') || $this->lecturerService->isLecturer($this->user);;
     }
     protected function postUpdate()
     {
-        return $this->user->hasAccess('assignment.update');
+        return $this->user->hasAccess('assignment.update') || $this->lecturerService->isLecturer($this->user);;
     }
 
     protected function getView($assignment_id)
     {
         //Has Permission
         //Or Is a lecturer
-        if($this->permissionService->isSuperAdmin($this->user) ||
-            $this->user->hasAccess('assignment.view') ||
+        if($this->user->hasAccess('assignment.view') ||
             $this->lecturerService->isLecturer($this->user)) {
             return true;
         } else {
@@ -62,9 +61,35 @@ class AssignmentControllerPolicy extends BaseControllerPolicy
         return false;
     }
 
-    protected function postUpload()
+    protected function getViewSubmission()
     {
-        return true;
+        return $this->user->hasAccess('assignment.view') || $this->lecturerService->isLecturer($this->user);
+    }
+
+    protected function postUpload($assignment_id)
+    {
+        //Is a student
+        if($this->studentService->isStudent($this->user)) {
+            return \App\Models\Assignment::where('id','=',$assignment_id)
+                ->whereHas('lecture',function($q){
+                    return $q->whereHas('course',function($q) {
+                        return $q->whereHas('batch',function($q) {
+                            return $q->whereHas('student',function($q) {
+                                return $q->whereHas('user', function($q) {
+                                    return $q->where('id','=',$this->user->id);
+                                });
+                            });
+                        });
+                    });
+                })->count() > 0;
+        }
+
+        return false;
+    }
+
+    protected function postDelete()
+    {
+        return $this->lecturerService->isLecturer($this->user) || $this->hasAccess('assignment.delete');
     }
 
 
