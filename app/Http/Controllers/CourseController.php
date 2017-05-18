@@ -55,6 +55,10 @@ class CourseController extends Controller
 
     public function getCreate()
     {
+        //Verify User Access
+        $this->verifyAccess();
+
+
         //Set Page Title
         $this->data['pageTitle'] = 'Course - Create';
 
@@ -80,6 +84,11 @@ class CourseController extends Controller
 
     public function postCreate(Request $request)
     {
+        //Verify User Access
+        $this->verifyAccess();
+
+
+
         //Validate Data from request
         $this->validateData($request->all(),[
             'course_id' => 'required|max:5',
@@ -134,6 +143,12 @@ class CourseController extends Controller
 
     public function getView($course_id)
     {
+        //Verify User Access
+        $this->verifyAccess();
+
+
+
+
         $course = \App\Models\Course::findOrFail((int)$course_id);
 
         //Verify User Access

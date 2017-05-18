@@ -31,6 +31,11 @@ class LecturerController extends Controller
 
     public function getList()
     {
+        //Verify User Access
+        $this->verifyAccess();
+
+
+
         //Set Page Title
         $this->data['pageTitle'] = 'Lecturer - List';
 
@@ -93,6 +98,9 @@ class LecturerController extends Controller
 
     public function getView(Request $request, $lecturer_id)
     {
+
+        //Verify User Access
+        $this->verifyAccess();
 
     }
     

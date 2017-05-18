@@ -34,6 +34,11 @@ class AssignmentController extends Controller
 
     public function getList()
     {
+        //Verify User Access
+        $this->verifyAccess();
+
+
+
         //Set Page Title
         $this->data['pageTitle'] = 'Assignment - List';
 

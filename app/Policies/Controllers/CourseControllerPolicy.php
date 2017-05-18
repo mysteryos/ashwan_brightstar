@@ -30,19 +30,17 @@ class CourseControllerPolicy extends BaseControllerPolicy
         return $this->user->hasAccess('course.update');
     }
 
-<<<<<<< .mine
+
+
+
     protected function getView($course_id)
     {
         return true;
     }
 
-=======
 
 
 
-
-
->>>>>>> .theirs
     protected function getViewCourse($course_id)
     {
         return true;
