@@ -116,6 +116,20 @@ return [
             ]
         ]
     ],
+    'Quiz' => [
+        'name' => 'Quiz',
+        'icon' => 'zmdi zmdi-pin-help',
+        'inurl' => '/quiz/',
+        'sub' => [
+            'list' => [
+                'name' => 'List',
+                'icon' => 'zmdi zmdi-view-list',
+                'permission' => 'quiz.list.view',
+                'href' => '/quiz/list',
+                'in url' => '/quiz/list'
+            ]
+        ]
+    ],
     'Batch' => [
         'name' => 'Batch',
         'icon' => 'zmdi zmdi-accounts-list',

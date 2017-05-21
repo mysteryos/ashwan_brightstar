@@ -1,0 +1,11 @@
+.answer-container {
+    padding-top: 0px !important;
+}
+
+.help-block.has-error {
+    margin-left: 23px;
+}
+
+.card-header {
+    font-size: 14px;
+}

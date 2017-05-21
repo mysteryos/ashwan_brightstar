@@ -39,9 +39,7 @@
                                             @endif
                                         </td>
                                         <td>
-                                            @if($row->created_at)
-                                                {{$row->created_at->format('Y-m-d')}}
-                                            @endif
+                                            {{$row->created_at}}
                                         </td>
                                         @if($hasDeleteAccess)
                                             <td>

@@ -42,6 +42,16 @@
                                 <dd>@if($lecture->course)<a href="{{action('CourseController@getView',['course_id'=>$lecture->course->id])}}" target="_blank">{{$lecture->course->name}}</a>@endif</dd>
                             </dl>
                             <dl class="dl-horizontal">
+                                <dt>Quiz</dt>
+                                <dd>
+                                    @if($lecture->quiz)
+                                        @foreach($lecture->quiz as $quiz)
+                                            <a href='{{action('QuizController@getViewStudent',['quiz_id'=>$quiz->id])}}' target='_blank' class="m-r-10">{{$quiz->name}}</a>
+                                        @endforeach
+                                    @endif
+                                </dd>
+                            </dl>
+                            <dl class="dl-horizontal">
                                 <dt>Description</dt>
                                 <dd>{!! $lecture->description !!}</dd>
                             </dl>

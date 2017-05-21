@@ -168,7 +168,7 @@ class LectureController extends Controller
      */
     public function getView($lecture_id)
     {
-        $lecture = \App\Models\Lecture::with('course')->findOrFail((int)$lecture_id);
+        $lecture = \App\Models\Lecture::with('course','quiz')->findOrFail((int)$lecture_id);
 
         //Verify User Access
         $this->verifyAccess($lecture);

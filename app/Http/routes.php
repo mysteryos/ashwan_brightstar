@@ -52,6 +52,9 @@ Route::controller('course', 'CourseController');
 //Assignment Route
 Route::controller('assignment', 'AssignmentController');
 
+//Quiz route
+Route::controller('quiz', 'QuizController');
+
 
 /*
  * Administration Controllers

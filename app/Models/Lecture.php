@@ -54,4 +54,14 @@ class Lecture extends \Eloquent
         return $this->belongsTo(User::class, 'creator_user_id');
     }
 
+    /**
+     * Quiz
+     *
+     * @return Quiz
+     */
+    public function quiz()
+    {
+        return $this->hasMany(Quiz::class, 'lecture_id');
+    }
+
 }
