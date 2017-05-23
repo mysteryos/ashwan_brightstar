@@ -42,9 +42,6 @@
                             <li class="hidden-xs">
                                 <a data-action="fullscreen" href=""><i class="zmdi zmdi-fullscreen"></i> Toggle Fullscreen</a>
                             </li>
-                            <li>
-                                <a data-action="clear-localstorage" href=""><i class="zmdi zmdi-delete"></i> Clear Local Storage</a>
-                            </li>
                             @if(session('login_as',false))
                                 <li>
                                     <a href="{{action('Admin\UsersController@getLoginBack')}}"><i class="zmdi zmdi-refresh-sync"></i> Login Back</a>

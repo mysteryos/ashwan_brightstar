@@ -46,6 +46,12 @@ class QuizController extends Controller
         return $this->renderView('quiz.view-student');
     }
 
+    /**
+     * Save student's result
+     *
+     * @param Request $request
+     * @return $this|\Illuminate\Http\RedirectResponse
+     */
     public function postStudentResult(Request $request)
     {
         $quiz = \App\Models\Quiz::with('question','question.correctAnswer')->findOrFail(\Crypt::decrypt($request->input('quiz_id')));

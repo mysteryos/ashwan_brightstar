@@ -21,16 +21,16 @@ class AssignmentControllerPolicy extends BaseControllerPolicy
 
     protected function getCreate()
     {
-        return $this->user->hasAccess('assignment.create') || $this->lecturerService->isLecturer($this->user);;
+        return $this->user->hasAccess('assignment.create') || $this->lecturerService->isLecturer($this->user);
     }
 
     protected function postCreate()
     {
-        return $this->user->hasAccess('assignment.create') || $this->lecturerService->isLecturer($this->user);;
+        return $this->user->hasAccess('assignment.create') || $this->lecturerService->isLecturer($this->user);
     }
     protected function postUpdate()
     {
-        return $this->user->hasAccess('assignment.update') || $this->lecturerService->isLecturer($this->user);;
+        return $this->user->hasAccess('assignment.update') || $this->lecturerService->isLecturer($this->user);
     }
 
     protected function getView($assignment_id)
@@ -100,7 +100,7 @@ class AssignmentControllerPolicy extends BaseControllerPolicy
     protected function getFile($file)
     {
         //Lecturer or permission access
-        if($this->lecturerService->isLecturer($this->user) || $this->hasAcces('assignment.file.view')) {
+        if($this->lecturerService->isLecturer($this->user) || $this->hasAccess('assignment.file.view')) {
             return true;
         } else {
             //If is creator of file, give access

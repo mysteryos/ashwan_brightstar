@@ -193,6 +193,12 @@ class AssignmentController extends Controller
         return redirect()->action('AssignmentController@getView',[$assignment->id]);
     }
 
+    /**
+     * POST: Student uploading file associated to assignment
+     *
+     * @param Request $request
+     * @return $this|\Illuminate\Http\RedirectResponse
+     */
     public function postUpload(Request $request)
     {
         $assignment = \App\Models\Assignment::findOrFail($request->get('id'));
@@ -229,6 +235,7 @@ class AssignmentController extends Controller
                             'mime' => $file->getMimeType(),
                             'path' => $path,
                         ]);
+
                         $file->creator()->associate($this->user);
                         $file->save();
 

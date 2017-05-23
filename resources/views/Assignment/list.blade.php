@@ -22,7 +22,6 @@
                     <tr>
                         <th data-column-id="id" data-type="numeric">ID</th>
                         <th data-column-id="name" >Name</th>
-                        <th data-column-id="description">Description</th>
                         <th data-column-id="lecture_id" >Lecture</th>
                         <th data-column-id="is_active">Active</th>
                         @if($isStudent)
@@ -41,7 +40,6 @@
                     <tr class="assignment-row">
                         <td>{{$assignment_row->id}}</td>
                         <td>{{$assignment_row->name}}</td>
-                        <td>{{$assignment_row->description}}</td>
                         <td>@if($assignment_row->lecture){{$assignment_row->lecture->name}}@else{{('N/A')}}@endif</td>
                         <td data-html="allow">@if($assignment_row->isActive())<span class="c-green">Yes</span>@else<span class="c-red">No</span>@endif</td>
                         @if($isStudent)
