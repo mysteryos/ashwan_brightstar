@@ -14,7 +14,7 @@
             @if($hasBatchUpdateAccess)
                 <div class="pmb-block">
                     <div class="pmbb-body">
-                        <form class="form-horizontal" method="POST" action="{{action('BatchController@postCreateStudent')}}">
+                        <form class="form-horizontal row" method="POST" action="{{action('BatchController@postCreateStudent')}}">
                             {{csrf_field()}}
                             <input type="hidden" name="id" value="{{\Crypt::encrypt($batch->id)}}" />
                             <div class="col-xs-10">
@@ -62,7 +62,7 @@
                     <tbody>
                     @foreach($batch->student as $student_row)
                         <tr class="delegate-row">
-                            <td>{{$student_row->id}}</td>
+                            <td><a href="{{action('StudentController@getView',['student_id'=>$student_row->id])}}">{{$student_row->id}}<a/></td>
                             <td>
                                 {{$student_row->name}}
                             </td>

@@ -9,8 +9,12 @@
 namespace App\Models;
 
 
+use Illuminate\Database\Eloquent\Collection;
+
 class Lecturer extends \Eloquent
 {
+    use \Illuminate\Database\Eloquent\SoftDeletes;
+
     protected $table = 'lecturer';
 
     /**
@@ -49,15 +53,33 @@ class Lecturer extends \Eloquent
      *
      */
 
+    /**
+     * Link to User Profile
+     *
+     * @return User
+     */
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
     }
 
+    /**
+     * Creator User Profile
+     *
+     * @return User
+     */
     public function creator()
     {
         return $this->belongsTo(User::class, 'creator_user_id');
     }
 
-
+    /**
+     * Batch
+     *
+     * @return Collection
+     */
+    public function batch()
+    {
+        return $this->hasMany(Batch::class, 'lecturer_id');
+    }
 }

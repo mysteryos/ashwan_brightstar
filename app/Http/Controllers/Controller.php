@@ -60,6 +60,9 @@ abstract class Controller extends BaseController
         $this->isSuperAdmin = app('\App\Services\Permission')->isSuperAdmin($this->user);
         $this->detectAgent = new Agent();
         $this->buildPath = public_path('build');
+
+        $this->studentService = app('App\Services\Student');
+        $this->lecturerService = app('App\Services\Lecturer');
     }
 
     /**

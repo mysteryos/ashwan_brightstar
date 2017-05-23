@@ -18,7 +18,6 @@
 <body class="login-content">
 
     <div class="text-center">
-        <div><img class="logo" src="/img/el/logo.png" name="Logo" /></div>
         <h1 class="c-white"><img class="ess-logo" src="/img/logo_small.png" name="EL" /> {{config('website.name')}} E-Learning</h1>
     </div>
 

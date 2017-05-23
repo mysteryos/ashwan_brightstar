@@ -14,33 +14,34 @@ $(function(){
         }
     });
 
-    $.validator.addMethod("lettersonly", function(value, element) {
-        return this.optional(element) || /^[a-z ]+$/i.test(value);
-    }, "Letters only please");
-
-
     //Validate
     $('#lecture_create_form').validate({
         rules: {
-            id: {
-                required: true,
-                maxlength: 5,
-                digitsonly: true
-            },
             name: {
                 required: true,
-                maxlength: 255,
-                lettersonly: true
+                maxlength: 255
             },
             description: {
-                description: true,
-                maxlength: 254
+                required: true
             },
             course_id: {
-                required: true,
-                maxlength: 5,
-                digitsonly: true
-            },
+                required: true
+            }
+        },
+        submitHandler: function(form) {
+            return form.valid();
         }
+    });
+
+    $('#inputDescription').summernote({
+        toolbar: [
+            ['style', ['bold', 'italic', 'underline', 'clear']],
+            ['fontsize', ['fontsize']],
+            ['color', ['color']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['insert',['link']]
+        ],
+        disableDragAndDrop: true,
+        minHeight: 500
     });
 });

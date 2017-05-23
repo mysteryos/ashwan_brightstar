@@ -11,6 +11,8 @@ namespace App\Models;
 
 class Lecture extends \Eloquent
 {
+    use \Illuminate\Database\Eloquent\SoftDeletes;
+
     protected $table = 'lecture';
 
 
@@ -28,36 +30,38 @@ class Lecture extends \Eloquent
     ];
 
     /**
-     * Additional attributes available on model
-     *
-     * @var array
-     */
-    protected $appends = ['name'];
-
-    /**
-     * ACCESSOR: Name
-     *
-     * @return string
-     */
-    public function getNameAttribute()
-    {
-        return "{$this->first_name} {$this->last_name}";
-    }
-
-    /**
      * Relationships
      *
      */
 
-
+    /**
+     * Course
+     *
+     * @return Course
+     */
     public function course()
     {
         return $this->belongsTo(Course::class, 'course_id');
     }
 
+    /**
+     * Creator
+     *
+     * @return User
+     */
     public function creator()
     {
         return $this->belongsTo(User::class, 'creator_user_id');
+    }
+
+    /**
+     * Quiz
+     *
+     * @return Quiz
+     */
+    public function quiz()
+    {
+        return $this->hasMany(Quiz::class, 'lecture_id');
     }
 
 }

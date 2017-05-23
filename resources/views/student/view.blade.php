@@ -7,6 +7,7 @@
         <div class="pm-body clearfix">
             <ul class="tab-nav tn-justified">
                 <li class="active waves-effect"><a href="{{action('StudentController@getView',['student_id'=>$student->id])}}">About</a></li>
+                <li class="waves-effect"><a href="{{action('StudentController@getViewBatch',['student_id'=>$student->id])}}">Batch</a></li>
             </ul>
 
             <div class="pmb-block">

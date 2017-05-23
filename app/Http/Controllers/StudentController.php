@@ -31,6 +31,11 @@ class StudentController extends Controller
         $this->middleware('auth');
     }
 
+    /**
+     * GET: List of students
+     *
+     * @return \Illuminate\View\View
+     */
     public function getList()
     {
         $this->verifyAccess();
@@ -52,6 +57,11 @@ class StudentController extends Controller
         return $this->renderView('student.list');
     }
 
+    /**
+     * GET: Create Student Profile
+     *
+     * @return \Illuminate\View\View
+     */
     public function getCreate()
     {
         //Verify User Access
@@ -70,6 +80,12 @@ class StudentController extends Controller
         return $this->renderView('student.create');
     }
 
+    /**
+     * POST: Create Student
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function postCreate(Request $request)
     {
         //Verify User Access
@@ -115,7 +131,7 @@ class StudentController extends Controller
             'mobile_number' => 'numeric|digits_between:4,15'
         ]);
 
-        $student = \App\Models\Student::findOrFail($request->get('id'));
+        $student = \App\Models\Student::findOrFail((int)$request->input('id'));
 
         //Fill in information from request
         $student->fill($request->all());
@@ -155,4 +171,105 @@ class StudentController extends Controller
         return $this->renderView('student.view');
     }
 
+    /**
+     * GET: List of batch student is enrolled in
+     *
+     * @param $student_id
+     * @return \Illuminate\View\View
+     */
+    public function getViewBatch($student_id)
+    {
+        $student = \App\Models\Student::with('batch')->findOrFail((int)$student_id);
+
+        //Verify User Access
+        $this->verifyAccess($student->id);
+
+        //Set Page Title
+        $this->data['pageTitle'] = 'Student - View Batch - '.$student->name;
+
+        $this->data['student'] = $student;
+
+        $this->data['hasStudentUpdateAccess'] = $this->hasAccess('student.update');
+        $this->data['hasStudentDeleteAccess'] = $this->hasAccess('student.delete');
+
+        $batchIds = $student->batch->map(function($row) {
+            return $row->id;
+        });
+
+        $this->data['batch_list'] = \App\Models\Batch::whereNotIn('id',$batchIds)->get();
+
+        /*
+         * Assets
+         */
+
+        $this->addJs('/js/el/student.view_batch.js');
+
+        return $this->renderView('student.view-batch');
+    }
+
+    /**
+     * Post: Link Batch To Student
+     *
+     * @param Request $request
+     * @return $this|\Illuminate\Http\RedirectResponse
+     */
+    public function postCreateBatch(Request $request)
+    {
+        $student = \App\Models\Student::with('batch')->findOrFail(\Crypt::decrypt($request->get('id')));
+
+        //Verify User Access
+        $this->verifyAccess((int)$student->id);
+
+        $batch = \App\Models\Batch::findOrFail(\Crypt::decrypt($request->get('batch_id')));
+
+        $batchIds = $student->batch->map(function($row) {
+            return $row->id;
+        });
+
+        //Check if student is already in the batch
+        if(in_array($batch->id, $batchIds->toArray())) {
+            return redirect()->back()->withErrors("Batch with ID: {$batch->id} is already linked to student");
+        }
+
+        //DB: Link student to batch
+        $student->batch()->save($batch);
+        $student->touch();
+
+        return redirect()->back()->with([
+            'messages' => "Batch with ID: {$batch->id} was successfully linked to student"
+        ]);
+    }
+
+    /**
+     * POST: Unlink batch from student
+     *
+     * @param Request $request
+     * @return $this|\Illuminate\Http\RedirectResponse
+     */
+    public function postDeleteBatch(Request $request)
+    {
+        $student = \App\Models\Student::with('batch')->findOrFail((int)$request->get('id'));
+
+        //Verify User Access
+        $this->verifyAccess((int)$student->id);
+
+        $batch = \App\Models\Batch::findOrFail((int)$request->get('batch_id'));
+
+        $batchIds = $student->batch->map(function($row) {
+            return $row->id;
+        });
+
+        //Check if student is not in the batch
+        if(!in_array($batch->id, $batchIds->toArray())) {
+            return redirect()->back()->withErrors("Batch with ID: {$batch->id} is not linked to student.");
+        }
+
+        //DB: Remove batch from student
+        $student->batch()->detach($batch->id);
+        $student->touch();
+
+        return redirect()->back()->with([
+            'messages' => "Batch with ID: {$batch->id} was successfully unlinked from student"
+        ]);
+    }
 }

@@ -29,12 +29,14 @@ class LecturerController extends Controller
         $this->middleware('auth');
     }
 
+    /**
+     * GET: List of lecturers
+     *
+     * @return \Illuminate\View\View
+     */
     public function getList()
     {
-        //Verify User Access
         $this->verifyAccess();
-
-
 
         //Set Page Title
         $this->data['pageTitle'] = 'Lecturer - List';
@@ -53,6 +55,11 @@ class LecturerController extends Controller
         return $this->renderView('lecturer.list');
     }
 
+    /**
+     * GET: Create Lecturer Profile
+     *
+     * @return \Illuminate\View\View
+     */
     public function getCreate()
     {
         //Verify User Access
@@ -68,11 +75,16 @@ class LecturerController extends Controller
         $this->addJqueryValidate();
 
         $this->addJs('/js/el/lecturer.create.js');
+
         return $this->renderView('lecturer.create');
-
-
     }
 
+    /**
+     * POST: Create Lecturer Profile
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function postCreate(Request $request)
     {
         //Verify User Access
@@ -91,19 +103,66 @@ class LecturerController extends Controller
         //Fill in information from request
         $lecturer->fill($request->all());
         //Set creator user id to user currently logged in
-        $lecturer->creator_user_id = $this->user->id;
+        $lecturer->creator()->associate($this->user);
         //Save to database
         $lecturer->save();
+
+        return redirect()->action('LecturerController@getView',['lecturer_id' => $lecturer->id]);
     }
 
+    /**
+     * POST: Update Lecturer Profile
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function postUpdate(Request $request)
+    {
+        //Verify User Access
+        $this->verifyAccess();
+
+        //Validate Data from request
+        $this->validateData($request->all(),[
+            'first_name' => 'required|max:255|alpha_spaces',
+            'last_name' => 'required|max:255|alpha_spaces',
+            'email' => 'email|max:254',
+            'mobile_number' => 'numeric|digits_between:4,15'
+        ]);
+
+        $lecturer = \App\Models\Lecturer::findOrFail((int)$request->input('id'));
+        $lecturer->fill($request->all());
+        $lecturer->save();
+
+        return redirect()->action('LecturerController@getView',['lecturer_id' => $lecturer->id]);
+    }
+
+    /**
+     * GET: View Lecturer Profile
+     *
+     * @param Request $request
+     * @param int $lecturer_id
+     * @return \Illuminate\View\View
+     */
     public function getView(Request $request, $lecturer_id)
     {
+        $lecturer = \App\Models\Lecturer::findOrFail((int)$lecturer_id);
 
         //Verify User Access
         $this->verifyAccess();
 
+        //Set Page Title
+        $this->data['pageTitle'] = 'Lecturer - View - '.$lecturer->name;
+
+        $this->data['lecturer'] = $lecturer;
+
+        /*
+         * Assets
+         */
+        $this->addJqueryValidate();
+
+        $this->addJs('/js/el/lecturer.view.js');
+        $this->addCss('/css/el/lecturer.view.css');
+
+        return $this->renderView('lecturer.view');
     }
-    
-
-
 }

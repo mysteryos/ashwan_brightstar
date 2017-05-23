@@ -13,11 +13,6 @@
 
 Route::get('/', 'IndexController@getIndex');
 
-
-Route::get('/test', function() {
-    die(var_dump(\App\Models\Assignment::all()->toArray()));
-});
-
 /*
  * User Routes
  */
@@ -56,6 +51,9 @@ Route::controller('course', 'CourseController');
 
 //Assignment Route
 Route::controller('assignment', 'AssignmentController');
+
+//Quiz route
+Route::controller('quiz', 'QuizController');
 
 
 /*

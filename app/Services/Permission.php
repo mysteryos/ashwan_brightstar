@@ -89,19 +89,4 @@ class Permission extends Service
             return false;
         }
     }
-
-    /**
-     * Check if user is human resources
-     *
-     * @param $user
-     * @return bool
-     */
-    public function isHumanResource($user)
-    {
-        if($user) {
-            return $user->hasAccess($this->repository->permission->getHumanResourcesSlug());
-        } else {
-            return false;
-        }
-    }
 }

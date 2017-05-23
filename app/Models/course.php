@@ -11,6 +11,8 @@ namespace App\Models;
 
 class Course extends \Eloquent
 {
+    use \Illuminate\Database\Eloquent\SoftDeletes;
+
     protected $table = 'course';
 
     /**

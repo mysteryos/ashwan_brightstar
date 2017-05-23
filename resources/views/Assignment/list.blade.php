@@ -22,11 +22,12 @@
                     <tr>
                         <th data-column-id="id" data-type="numeric">ID</th>
                         <th data-column-id="name" >Name</th>
-                        <th data-column-id="description">Description</th>
                         <th data-column-id="lecture_id" >Lecture</th>
-                        <th data-column-id="submission_date">Submission Date</th>
-
-
+                        <th data-column-id="is_active">Active</th>
+                        @if($isStudent)
+                            <th data-column-id="is_active">Submitted</th>
+                        @endif
+                        <th data-column-id="submission_date">Due on</th>
                         @if($isSuperAdmin)
                             <th data-column-id="created_at" data-order="desc">Created at</th>
                             <th data-column-id="updated_at">Updated At</th>
@@ -39,9 +40,12 @@
                     <tr class="assignment-row">
                         <td>{{$assignment_row->id}}</td>
                         <td>{{$assignment_row->name}}</td>
-                        <td>{{$assignment_row->description}}</td>
                         <td>@if($assignment_row->lecture){{$assignment_row->lecture->name}}@else{{('N/A')}}@endif</td>
-                        <td>{{$assignment_row->submission_date}}</td>
+                        <td data-html="allow">@if($assignment_row->isActive())<span class="c-green">Yes</span>@else<span class="c-red">No</span>@endif</td>
+                        @if($isStudent)
+                            <td data-html="allow">@if($assignment_row->isSubmitted)<span class="c-green">Yes</span>@else<span class="c-red">No</span>@endif</td>
+                        @endif
+                        <td>@if($assignment_row->submission_date){{$assignment_row->submission_date->format('Y-m-d')}}@endif</td>
                         @if($isSuperAdmin)
                             <td>{{$assignment_row->created_at}}</td>
                             <td>{{$assignment_row->updated_at}}</td>

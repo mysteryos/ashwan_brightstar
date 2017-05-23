@@ -152,7 +152,7 @@ class CourseController extends Controller
         $course = \App\Models\Course::findOrFail((int)$course_id);
 
         //Verify User Access
-        $this->verifyAccess($course_id);
+        $this->verifyAccess($course);
 
         //Set Page Title
         $this->data['pageTitle'] = 'Course - View - '.$course->name;
@@ -168,6 +168,11 @@ class CourseController extends Controller
         $this->addCss('/css/el/course.view.css');
 
         return $this->renderView('course.view');
+    }
+
+    public function getViewStudent()
+    {
+
     }
 
 

@@ -32,7 +32,7 @@ return [
         'name' => 'Students',
         'icon' => 'zmdi zmdi-graduation-cap',
         'permission' => 'students.view',
-        'inurl' => '/students/',
+        'inurl' => '/student/',
         'sub' => [
             'list' => [
                 'name' => 'List',
@@ -113,6 +113,20 @@ return [
                 'permission' => 'lecture.create',
                 'href' => '/lecture/create',
                 'in url' => '/lecture/create'
+            ]
+        ]
+    ],
+    'Quiz' => [
+        'name' => 'Quiz',
+        'icon' => 'zmdi zmdi-pin-help',
+        'inurl' => '/quiz/',
+        'sub' => [
+            'list' => [
+                'name' => 'List',
+                'icon' => 'zmdi zmdi-view-list',
+                'permission' => 'quiz.list.view',
+                'href' => '/quiz/list',
+                'in url' => '/quiz/list'
             ]
         ]
     ],

@@ -13,18 +13,49 @@ class AssignmentStudents extends \Eloquent
 {
     protected $table = 'assignment_students';
 
+    /**
+     * Relationships
+     */
 
+    /**
+     * Creator
+     *
+     * @return User
+     */
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'creator_user_id');
+    }
+
+    /**
+     * Student
+     *
+     * @return Student
+     */
     public function student()
     {
         return $this->belongsTo(Student::class, 'student_id');
     }
 
-    public function assignments()
+    /**
+     * Assignment
+     *
+     * @return Assignment
+     */
+    public function assignment()
     {
-        return $this->belongsTo(Assignments::class, 'assignment_id');
+        return $this->belongsTo(Assignment::class, 'assignment_id');
     }
 
-
+    /**
+     * File
+     *
+     * @return File
+     */
+    public function file()
+    {
+        return $this->belongsTo(File::class, 'file_id');
+    }
 }
 
 

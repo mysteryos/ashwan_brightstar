@@ -43,7 +43,7 @@ class BatchController extends Controller
         $this->data['pageTitle'] = 'Batch - List';
 
         //Set Data
-        $this->data['batch_list'] = \App\Models\Batch::orderBy('updated_at','DESC')->get();
+        $this->data['batch_list'] = \App\Models\Batch::with('course')->orderBy('updated_at','DESC')->get();
 
         //Permissions
         $this->data['can_create_batch'] = true;
@@ -213,7 +213,10 @@ class BatchController extends Controller
             return $row->id;
         });
 
-        $this->data['student_list'] = \App\Models\Student::whereNotIn('id',$studentIds)->get();
+        $this->data['student_list'] = \App\Models\Student::whereNotIn('id',$studentIds)
+                                        ->orderBy('last_name','ASC')
+                                        ->orderBy('first_name','ASC')
+                                        ->get();
 
         $this->addJs('/js/el/batch.view_student.js');
 

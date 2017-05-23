@@ -18,8 +18,7 @@
 <body class="login-content">
 
 <div class="text-center">
-    <div><img class="logo" src="/img/ess/Bright Star-logo.png" name="Logo" /></div>
-    <h1 class="c-white"><img class="ess-logo" src="/img/logo_small.png" name="ESS" /> {{config('website.name')}} E-Learning</h1>
+    <div><img class="logo" src="/img/logo.png" name="Logo" /></div>
 </div>
 
 <!-- Login -->

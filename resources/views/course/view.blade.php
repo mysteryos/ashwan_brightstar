@@ -6,8 +6,8 @@
         @include('course.view-overview')
         <div class="pm-body clearfix">
             <ul class="tab-nav tn-justified">
-                <li class="active waves-effect"><a href="{{action('courseController@getView',['student_id'=>$course->id])}}">About</a></li>
-                <li class="waves-effect"><a href="{{action('courseController@getViewStudent',['student_id'=>$course->id])}}">Students</a></li>
+                <li class="active waves-effect"><a href="{{action('CourseController@getView',['student_id'=>$course->id])}}">About</a></li>
+                <li class="waves-effect"><a href="{{action('CourseController@getViewStudent',['student_id'=>$course->id])}}">Students</a></li>
             </ul>
 
             <div class="pmb-block">
@@ -29,7 +29,7 @@
                     </ul>
                 </div>
                 <div class="pmbb-body p-l-30">
-                    <form action="{{action('courseController@postUpdate')}}" method="post" name="course_basic_info_form" id="course_basic_info_form">
+                    <form action="{{action('CourseController@postUpdate')}}" method="post" name="course_basic_info_form" id="course_basic_info_form">
                         <input type="hidden" name="id" value="{{$course->id}}" />
                         {{csrf_field()}}
                         <div class="pmbb-view">
