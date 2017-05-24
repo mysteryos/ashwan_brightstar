@@ -142,6 +142,7 @@ class QuizController extends Controller
     public function getList()
     {
         $this->verifyAccess();
+
         $this->data['isStudent'] = $this->studentService->isStudent($this->user);
         $this->data['pageTitle'] = 'Quiz - List';
         //Is student

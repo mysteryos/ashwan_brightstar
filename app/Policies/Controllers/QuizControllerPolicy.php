@@ -38,7 +38,7 @@ class QuizControllerPolicy extends BaseControllerPolicy
 
     protected function getList()
     {
-        $this->hasAccess('quiz.list.view');
+        return $this->user->hasAccess('quiz.list.view');
     }
 
     protected function postStudentResult(\App\Models\Quiz $quiz)
@@ -58,6 +58,6 @@ class QuizControllerPolicy extends BaseControllerPolicy
             }
         }
 
-        return $this->hasAccess('quiz.result.view');
+        return $this->user->hasAccess('quiz.result.view');
     }
 }
