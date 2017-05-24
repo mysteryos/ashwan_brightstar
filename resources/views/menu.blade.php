@@ -17,7 +17,7 @@
 
             <ul class="main-menu">
                 <li>
-                    <a href="javascript:void(0);"><i class="zmdi zmdi-account"></i> View Profile</a>
+                    <a href="{{$view_profile_url}}"><i class="zmdi zmdi-account"></i> View Profile</a>
                 </li>
                 @if(session('login_as',false))
                     <li>

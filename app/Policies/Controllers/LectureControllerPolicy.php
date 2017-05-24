@@ -36,17 +36,16 @@ class LectureControllerPolicy extends BaseControllerPolicy
     protected function getView(\App\Models\Lecture $lecture)
     {
         $studentCanView = false;
-        $this->user->load('student');
         //Is Student
         if($this->studentService->isStudent($this->user)) {
-            //Fetch student id
-            $student_id = $this->user->student->id;
 
             $studentCanView = \App\Models\Lecture::orderBy('updated_at', 'DESC')
-                                ->whereHas('course',function($q) use($student_id){
-                                    return $q->whereHas('batch', function($q) use($student_id) {
-                                        return $q->whereHas('student', function($q) use ($student_id) {
-                                            return $q->where('student_id','=',$student_id);
+                                ->whereHas('course',function($q){
+                                    return $q->whereHas('batch', function($q) {
+                                        return $q->whereHas('student', function($q){
+                                            return $q->whereHas('user', function($q){
+                                                return $q->where('id','=',$this->user->id);
+                                            });
                                         });
                                     });
                                 })

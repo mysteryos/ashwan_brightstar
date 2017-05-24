@@ -33,4 +33,9 @@ class User extends EloquentUser
         return $this->hasOne(Student::class, 'user_id');
     }
 
+    public function lecturer()
+    {
+        return $this->hasOne(Lecturer::class, 'user_id');
+    }
+
 }

@@ -188,6 +188,8 @@ abstract class Controller extends BaseController
         /*
          * Set Data
          */
+
+
         $this->data['websiteName'] = $this->websiteName;
         $this->data['css'] = $this->css;
         $this->data['js'] = $this->js;
@@ -195,6 +197,19 @@ abstract class Controller extends BaseController
         $this->data['messages'] = Session::get('messages',null);
         $this->data['menu'] = $this->menu;
         $this->data['isSuperAdmin'] = $this->isSuperAdmin;
+
+        if($this->user) {
+            $this->user->load('student');
+            $this->user->load('lecturer');
+            if($this->user->student) {
+                $this->data['view_profile_url'] = action('StudentController@getView',['student_id'=>$this->user->student->id]);
+            } else if($this->user->lecturer) {
+                $this->data['view_profile_url'] = action('LecturerController@getView',['lecturer_id'=>$this->user->lecturer->id]);
+            } else {
+                $this->data['view_profile_url'] = "javascript:void(0)";
+            }
+        }
+
 
         /*
          * Add DI resolver
