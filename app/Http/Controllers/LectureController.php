@@ -54,7 +54,9 @@ class LectureController extends Controller
                                         ->whereHas('course',function($q) use($studentProfile){
                                             return $q->whereHas('batch', function($q) use($studentProfile) {
                                                 return $q->whereHas('student', function($q) use ($studentProfile) {
-                                                   return $q->where('student_id','=',$studentProfile->id);
+                                                   return $q->whereHas('user',function($q) {
+                                                       return $q->where('id','=',$this->user->id);
+                                                   });
                                                 });
                                             });
                                         })
