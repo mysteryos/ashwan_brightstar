@@ -35,6 +35,10 @@ class BatchController extends Controller
 
     public function getList()
     {
+        //Verify User Access
+        $this->verifyAccess();
+
+
         //Set Page Title
         $this->data['pageTitle'] = 'Batch - List';
 
@@ -54,6 +58,10 @@ class BatchController extends Controller
 
     public function getCreate()
     {
+        //Verify User Access
+        $this->verifyAccess();
+
+
 
         //Set Page Title
         $this->data['pageTitle'] = 'Batch - Create';
@@ -80,6 +88,11 @@ class BatchController extends Controller
 
     public function postCreate(Request $request)
     {
+        //Verify User Access
+        $this->verifyAccess();
+
+
+
         //Validate Data from request
         $this->validateData($request->all(),[
             'id' => 'required|max:255',

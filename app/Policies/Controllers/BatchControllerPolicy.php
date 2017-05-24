@@ -21,6 +21,14 @@ class BatchControllerPolicy extends BaseControllerPolicy
         return $this->user->hasAccess('batch.create');
     }
 
+    protected function getList()
+    {
+        return $this->user->hasAccess('batch.list.view');
+    }
+
+
+
+
     protected function postUpdate()
     {
         return $this->user->hasAccess('batch.update');
