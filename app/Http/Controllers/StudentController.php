@@ -153,7 +153,7 @@ class StudentController extends Controller
         $student = \App\Models\Student::findOrFail((int)$student_id);
 
         //Verify User Access
-        $this->verifyAccess($student->id);
+        $this->verifyAccess($student);
 
         //Set Page Title
         $this->data['pageTitle'] = 'Student - View - '.$student->name;
