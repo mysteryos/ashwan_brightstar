@@ -70,7 +70,7 @@ class AssignmentController extends Controller
 
 
         //Permissions
-        $this->data['can_create_assignment'] = true;
+        $this->data['can_create_assignment'] = $this->user->hasAccess('assignment.create') || $this->lecturerService->isLecturer($this->user);
 
         //Assets
         $this->addjQueryBootgrid();
