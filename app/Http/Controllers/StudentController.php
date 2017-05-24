@@ -119,8 +119,10 @@ class StudentController extends Controller
      */
     public function postUpdate(Request $request)
     {
+        $student = \App\Models\Student::findOrFail((int)$request->input('id'));
+
         //Verify User Access
-        $this->verifyAccess();
+        $this->verifyAccess($student);
 
         //Validate Data from request
         $this->validateData($request->all(),[
@@ -182,7 +184,7 @@ class StudentController extends Controller
         $student = \App\Models\Student::with('batch')->findOrFail((int)$student_id);
 
         //Verify User Access
-        $this->verifyAccess($student->id);
+        $this->verifyAccess($student);
 
         //Set Page Title
         $this->data['pageTitle'] = 'Student - View Batch - '.$student->name;
