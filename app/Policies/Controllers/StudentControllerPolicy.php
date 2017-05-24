@@ -27,9 +27,16 @@ class StudentControllerPolicy extends BaseControllerPolicy
         return $this->user->hasAccess('student.create');
     }
 
-    protected function postUpdate()
+    protected function postUpdate($student)
     {
-        return $this->user->hasAccess('student.update');
+        $studentUpdateSelfProfile = false;
+
+        $student->load('user');
+        if($student->user) {
+            $studentUpdateSelfProfile = $student->user->id === $this->user->id;
+        }
+
+        return $this->user->hasAccess('student.update') || $this->lecturerService->isLecturer($this->user) || $studentUpdateSelfProfile;
     }
 
     protected function getView($student)
