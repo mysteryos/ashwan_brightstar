@@ -111,4 +111,6 @@
             </div>
         </div>
     </div>
+
+    @include('lecturer.link-user-modal')
 </div>

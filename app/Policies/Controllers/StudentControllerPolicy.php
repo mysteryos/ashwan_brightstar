@@ -77,4 +77,14 @@ class StudentControllerPolicy extends BaseControllerPolicy
     {
         return $this->lecturerService->isLecturer($this->user) || $this->user->hasAccess('student.list.view');
     }
+
+    protected function getUnlinkUser()
+    {
+        return false;
+    }
+
+    protected function postLinkUser()
+    {
+        return false;
+    }
 }

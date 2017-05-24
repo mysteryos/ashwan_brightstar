@@ -155,14 +155,92 @@ class LecturerController extends Controller
 
         $this->data['lecturer'] = $lecturer;
 
+        $this->data['user_orphans'] = \App\Models\User::doesntHave('student')->doesntHave('lecturer')->get();
+        $this->data['has_user_link_access'] = $this->isSuperAdmin;
+
         /*
          * Assets
          */
         $this->addJqueryValidate();
-
+        $this->addChosen();
+        $this->addJs('/js/el/lecturer.view.link_user.js');
         $this->addJs('/js/el/lecturer.view.js');
         $this->addCss('/css/el/lecturer.view.css');
 
         return $this->renderView('lecturer.view');
+    }
+
+    /**
+     * GET: Unlink user from lecturer
+     *
+     * @param Request $request
+     * @param int $lecturer_id
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function getUnlinkUser(Request $request, $lecturer_id)
+    {
+        $this->verifyAccess();
+
+        $lecturer = \App\Models\Lecturer::with('user')->findOrFail($lecturer_id);
+        $user = $lecturer->user;
+        $lecturer->user()->dissociate();
+        $lecturer->save();
+
+        if($user) {
+            //Remove user role
+            $roleService = app('App\Services\Role');
+            $roleService->removeUserRole($this->user,$user->id,"lecturer");
+        } else {
+            return redirect()->back()->withErrors([
+                'User Profile doesn\'t exist on the system'
+            ]);
+        }
+
+        return redirect()
+            ->back()
+            ->with([
+                'messages' => 'User profile was successfully unlinked from lecturer.'
+            ]);
+
+    }
+
+    /**
+     * POST: Link user to lecturer
+     *
+     * @param Request $request
+     * @return $this|\Illuminate\Http\RedirectResponse
+     */
+    public function postLinkUser(Request $request)
+    {
+        $this->verifyAccess();
+
+        $this->validateData($request->all(),[
+            'lecturer_id' => 'required|numeric|exists:lecturer,id',
+            'user_id' => 'required|numeric|exists:users,id'
+        ]);
+
+        $lecturer = \App\Models\Lecturer::findOrFail($request->input('lecturer_id'));
+
+        $user = \App\Models\User::findOrFail($request->input('user_id'));
+
+        if($user) {
+            //Attach user to lecturer profile
+            $lecturer->user()->associate($user);
+            $lecturer->save();
+
+            //Give user appropriate roles
+            $roleService = app('App\Services\Role');
+            $roleService->addUserRole($this->user,$user->id,"lecturer");
+        } else {
+            return redirect()->back()->withErrors([
+                'User Profile doesn\'t exist on the system'
+            ]);
+        }
+
+        return redirect()
+            ->back()
+            ->with([
+                'messages' => 'User profile was successfully linked to lecturer.'
+            ]);
     }
 }

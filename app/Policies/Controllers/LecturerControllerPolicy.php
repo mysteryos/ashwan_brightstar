@@ -36,4 +36,13 @@ class LecturerControllerPolicy extends BaseControllerPolicy
         return $this->user->hasAccess('lecturer.list.view') ;
     }
 
+    protected function getUnlinkUser()
+    {
+        return false;
+    }
+
+    protected function postLinkUser()
+    {
+        return false;
+    }
 }

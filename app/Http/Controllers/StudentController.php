@@ -152,7 +152,7 @@ class StudentController extends Controller
      */
     public function getView($student_id)
     {
-        $student = \App\Models\Student::findOrFail((int)$student_id);
+        $student = \App\Models\Student::with('user')->findOrFail((int)$student_id);
 
         //Verify User Access
         $this->verifyAccess($student);
@@ -162,11 +162,16 @@ class StudentController extends Controller
 
         $this->data['student'] = $student;
 
+        $this->data['user_orphans'] = \App\Models\User::doesntHave('student')->doesntHave('lecturer')->get();
+        $this->data['has_user_link_access'] = $this->isSuperAdmin;
+
         /*
          * Assets
          */
         $this->addJqueryValidate();
+        $this->addChosen();
 
+        $this->addJs('/js/el/student.view.link_user.js');
         $this->addJs('/js/el/student.view.js');
         $this->addCss('/css/el/student.view.css');
 
@@ -181,7 +186,7 @@ class StudentController extends Controller
      */
     public function getViewBatch($student_id)
     {
-        $student = \App\Models\Student::with('batch')->findOrFail((int)$student_id);
+        $student = \App\Models\Student::with('batch','user')->findOrFail((int)$student_id);
 
         //Verify User Access
         $this->verifyAccess($student);
@@ -190,7 +195,8 @@ class StudentController extends Controller
         $this->data['pageTitle'] = 'Student - View Batch - '.$student->name;
 
         $this->data['student'] = $student;
-
+        $this->data['user_orphans'] = \App\Models\User::doesntHave('student')->doesntHave('lecturer')->get();
+        $this->data['has_user_link_access'] = $this->isSuperAdmin;
         $this->data['hasStudentUpdateAccess'] = $this->hasAccess('student.update');
         $this->data['hasStudentDeleteAccess'] = $this->hasAccess('student.delete');
 
@@ -203,9 +209,10 @@ class StudentController extends Controller
         /*
          * Assets
          */
-
+        $this->addJqueryValidate();
+        $this->addChosen();
         $this->addJs('/js/el/student.view_batch.js');
-
+        $this->addJs('/js/el/student.view.link_user.js');
         return $this->renderView('student.view-batch');
     }
 
@@ -273,5 +280,79 @@ class StudentController extends Controller
         return redirect()->back()->with([
             'messages' => "Batch with ID: {$batch->id} was successfully unlinked from student"
         ]);
+    }
+
+    /**
+     * GET: Unlink user from student
+     *
+     * @param Request $request
+     * @param int $student_id
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function getUnlinkUser(Request $request, $student_id)
+    {
+        $this->verifyAccess();
+
+        $student = \App\Models\Student::with('user')->findOrFail($student_id);
+        $user = $student->user;
+        $student->user()->dissociate();
+        $student->save();
+
+        if($user) {
+            //Remove user role
+            $roleService = app('App\Services\Role');
+            $roleService->removeUserRole($this->user,$user->id,"student");
+        } else {
+            return redirect()->back()->withErrors([
+                'User Profile doesn\'t exist on the system'
+            ]);
+        }
+
+        return redirect()
+            ->back()
+            ->with([
+                'messages' => 'User profile was successfully unlinked from student.'
+            ]);
+
+    }
+
+    /**
+     * POST: Link user to student
+     *
+     * @param Request $request
+     * @return $this|\Illuminate\Http\RedirectResponse
+     */
+    public function postLinkUser(Request $request)
+    {
+        $this->verifyAccess();
+
+        $this->validateData($request->all(),[
+            'student_id' => 'required|numeric|exists:student,id',
+            'user_id' => 'required|numeric|exists:users,id'
+        ]);
+
+        $student = \App\Models\Student::findOrFail($request->input('student_id'));
+
+        $user = \App\Models\User::findOrFail($request->input('user_id'));
+
+        if($user) {
+            //Attach user to student profile
+            $student->user()->associate($user);
+            $student->save();
+
+            //Give user appropriate roles
+            $roleService = app('App\Services\Role');
+            $roleService->addUserRole($this->user,$user->id,"student");
+        } else {
+            return redirect()->back()->withErrors([
+                'User Profile doesn\'t exist on the system'
+            ]);
+        }
+
+        return redirect()
+            ->back()
+            ->with([
+                'messages' => 'User profile was successfully linked to student.'
+            ]);
     }
 }

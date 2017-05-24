@@ -105,4 +105,6 @@
             @endif
         </div>
     </div>
+
+    @include('student.link-user-modal')
 </div>
