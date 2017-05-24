@@ -86,7 +86,10 @@ class Assignment extends \Eloquent
     public function isActive()
     {
         if($this->submission_date) {
-            return \Carbon\Carbon::now()->diffInDays($this->submission_date,false) >= 0;
+            $total = \Carbon\Carbon::now()->diffInDays($this->submission_date, false);
+            if($total >= 0) {
+                return true;
+            }
         }
 
         return false;

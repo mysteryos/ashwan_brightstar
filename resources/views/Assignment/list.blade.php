@@ -25,7 +25,7 @@
                         <th data-column-id="lecture_id" >Lecture</th>
                         <th data-column-id="is_active">Active</th>
                         @if($isStudent)
-                            <th data-column-id="is_active">Submitted</th>
+                            <th data-column-id="submitted">Submitted</th>
                         @endif
                         <th data-column-id="submission_date">Due on</th>
                         @if($isSuperAdmin)

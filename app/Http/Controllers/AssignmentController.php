@@ -362,7 +362,7 @@ class AssignmentController extends Controller
      */
     public function getViewSubmission($assignment_id)
     {
-        $assignment = \App\Models\Assignment::with('submissions','submissions.file','submissions.student')->findOrFail((int)$assignment_id);
+        $assignment = \App\Models\Assignment::with('submissions','submissions.file','submissions.student','submissions.student.batch')->findOrFail((int)$assignment_id);
 
         //Verify User Access
         $this->verifyAccess();

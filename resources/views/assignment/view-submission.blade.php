@@ -17,6 +17,7 @@
                             <thead>
                                 <th>ID</th>
                                 <th>Student</th>
+                                <th>Batch</th>
                                 <th>File</th>
                                 <th>Date Submitted</th>
                             </thead>
@@ -27,7 +28,22 @@
                                             {{$row->id}}
                                         </td>
                                         <td>
-                                            @if($row->student){{$row->student->name}}@else{{"(Student Profile Missing)"}}}@endif
+                                            @if($row->student)
+                                                <a href="{{action('StudentController@getView',['student_id'=>$row->student->id])}}">{{$row->student->name}}</a>
+                                            @else
+                                                {{"(Student Profile Missing)"}}}
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if($row->student && count($row->student->batch))
+                                                {{implode(', ',
+                                                    $row->student->batch->map(function($item,$key) {
+                                                        return $item->name;
+                                                    })->all())
+                                                }}
+                                            @else
+                                                {{"(Student Profile Missing)"}}}
+                                            @endif
                                         </td>
                                         <td>
                                             @if($row->file)
