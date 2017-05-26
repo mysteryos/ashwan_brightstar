@@ -92,8 +92,8 @@ class LecturerController extends Controller
 
         //Validate Data from request
         $this->validateData($request->all(),[
-            'first_name' => 'required|max:255|alpha',
-            'last_name' => 'required|max:255|alpha',
+            'first_name' => 'required|max:255|alpha_spaces',
+            'last_name' => 'required|max:255|alpha_spaces',
             'email' => 'email|max:254',
             'mobile_number' => 'numeric|digits_between:4,15'
         ]);
