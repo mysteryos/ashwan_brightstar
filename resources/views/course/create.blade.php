@@ -15,6 +15,7 @@
                         </div>
                     </div>
                 </div>
+
                 <div class="form-group">
                     <label class="col-sm-2 control-label" for="inputDescription">Description*</label>
                     <div class="col-sm-10">
@@ -24,8 +25,6 @@
                     </div>
                 </div>
 
-
-
                 <div class="form-group">
                     <label class="col-sm-2 control-label" for="inputDurationMonths">Duration*</label>
                     <div class="col-sm-10">
@@ -34,8 +33,6 @@
                         </div>
                     </div>
                 </div>
-
-
 
                 <div class="form-group">
                     <div class="col-sm-offset-2 col-sm-10">

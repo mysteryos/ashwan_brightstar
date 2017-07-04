@@ -21,10 +21,10 @@ class Course extends \Eloquent
      * @var array
      */
     protected $fillable = [
-        'course_id',
         'name',
         'duration_months',
-        'description'];
+        'description'
+    ];
 
     /*
      * Relationships

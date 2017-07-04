@@ -264,7 +264,7 @@ abstract class Controller extends BaseController
             throw new \RuntimeException("Method for policy does not exist.");
         }
 
-        //Current Action is allowed
+        //Current Action is not allowed
         if(!$policy->$currentAction($param))
         {
             throw new HttpException(403,"You do not have access to this resource");

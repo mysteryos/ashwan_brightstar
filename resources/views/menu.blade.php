@@ -25,9 +25,6 @@
                     </li>
                 @endif
                 <li>
-                    <a href=""><i class="zmdi zmdi-settings"></i> Settings</a>
-                </li>
-                <li>
                     <a href="{{action('UserController@logout')}}" title="Logout"><i class="zmdi zmdi-square-right"></i> Logout</a>
                 </li>
             </ul>

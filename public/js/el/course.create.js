@@ -22,25 +22,16 @@ $(function(){
     $('#course_create_form').validate({
         rules: {
 
-            course_id: {
-                required: true,
-                maxlength: 5
-            },
-
-
             name: {
                 required: true,
                 maxlength: 255
-            },
-            description: {
-                required: true
             },
             duration_months: {
                 required: true,
                 digits: true,
                 max: 12,
                 min: 1
-            },
+            }
         }
     });
 });

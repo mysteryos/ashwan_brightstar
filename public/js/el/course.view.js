@@ -17,49 +17,21 @@ $(function(){
     });
 
     //Validate
-    $('#batch_basic_info_form').validate({
+    $('#course_basic_info_form').validate({
         rules: {
-
             id: {
-                required: true,
-                maxlength: 5
+                required: true
             },
-
-
             name: {
                 required: true,
                 maxlength: 255
             },
             duration_months: {
                 required: true,
-            },
-            description: {
-                required: true,
-
+                digits: true,
+                max: 12,
+                min: 1
             }
         }
-    });
-
-    $('#inputStartDate').datetimepicker({
-        format: 'YYYY-MM-DD',
-        useCurrent: false,
-        disabledDates: [
-            moment('2017-01-01'),
-            moment('2017-01-02'),
-            moment('2017-01-28'),
-            moment('2017-02-01'),
-            moment('2017-02-09'),
-            moment('2017-02-24'),
-            moment('2017-03-12'),
-            moment('2017-03-29'),
-            moment('2017-05-01'),
-            moment('2017-06-26'),
-            moment('2017-08-26'),
-            moment('2017-10-19'),
-            moment('2017-11-01'),
-            moment('2017-11-02'),
-            moment('2017-12-25')
-        ]
-
     });
 });

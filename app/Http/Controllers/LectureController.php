@@ -47,13 +47,11 @@ class LectureController extends Controller
 
         //If user is a student
         if($this->studentService->isStudent($this->user)) {
-            $studentProfile = \App\Models\Student::where('user_id','=',$this->user->id)->first();
-
             $this->data['lecture_list'] = \App\Models\Lecture::orderBy('updated_at', 'DESC')
                                         ->with('course')
-                                        ->whereHas('course',function($q) use($studentProfile){
-                                            return $q->whereHas('batch', function($q) use($studentProfile) {
-                                                return $q->whereHas('student', function($q) use ($studentProfile) {
+                                        ->whereHas('course',function($q){
+                                            return $q->whereHas('batch', function($q) {
+                                                return $q->whereHas('student', function($q) {
                                                    return $q->whereHas('user',function($q) {
                                                        return $q->where('id','=',$this->user->id);
                                                    });

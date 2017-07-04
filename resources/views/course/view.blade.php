@@ -7,7 +7,6 @@
         <div class="pm-body clearfix">
             <ul class="tab-nav tn-justified">
                 <li class="active waves-effect"><a href="{{action('CourseController@getView',['student_id'=>$course->id])}}">About</a></li>
-                <li class="waves-effect"><a href="{{action('CourseController@getViewStudent',['student_id'=>$course->id])}}">Students</a></li>
             </ul>
 
             <div class="pmb-block">
@@ -29,7 +28,7 @@
                     </ul>
                 </div>
                 <div class="pmbb-body p-l-30">
-                    <form action="{{action('CourseController@postUpdate')}}" method="post" name="course_basic_info_form" id="course_basic_info_form">
+                    <form action="{{action('CourseController@postUpdate')}}" method="POST" name="course_basic_info_form" id="course_basic_info_form">
                         <input type="hidden" name="id" value="{{$course->id}}" />
                         {{csrf_field()}}
                         <div class="pmbb-view">
@@ -38,20 +37,12 @@
                                 <dd>{{$course->name}}</dd>
                             </dl>
                             <dl class="dl-horizontal">
-                                <dt>Start Date*</dt>
-                                <dd>@if($course->start_date){{$course->start_date->format('Y-m-d')}}@endif</dd>
+                                <dt>Duration(months)*</dt>
+                                <dd>{{$course->duration_months}}</dd>
                             </dl>
                             <dl class="dl-horizontal">
-                                <dt>Course*</dt>
-                                <dd>@if($course->course)<a href="{{action('CourseController@getView',$course->course->id)}}">{{$course->course->name}}</a>@endif</dd>
-                            </dl>
-                            <dl class="dl-horizontal">
-                                <dt>lecture*</dt>
-                                <dd>
-                                    @if($course->lecture)
-                                        <a href="{{action('lectureController@getView',$course->lecture->id)}}" target="_blank">{{$course->lecture->name}}</a>
-                                    @endif
-                                </dd>
+                                <dt>Description*</dt>
+                                <dd>{{$course->description}}</dd>
                             </dl>
                         </div>
 
@@ -66,40 +57,19 @@
                             </dl>
 
                             <dl class="dl-horizontal">
-                                <dt class="p-t-10 form-label">Start Date</dt>
+                                <dt class="p-t-10 form-label">Duration(months)*</dt>
                                 <dd>
                                     <div class="fg-line">
-                                        <input type="text" class="form-control" placeholder="Start Date" name="start_date" id="inputStartDate" value="{{$course->start_date->format('Y-m-d')}}" />
+                                        <input type="text" class="form-control" placeholder="Duration(months)" name="duration_months" value="{{$course->duration_months}}" />
                                     </div>
                                 </dd>
                             </dl>
 
                             <dl class="dl-horizontal">
-                                <dt class="p-t-10 form-label">Course</dt>
+                                <dt class="p-t-10 form-label">Description*</dt>
                                 <dd>
                                     <div class="fg-line">
-                                        <div class="select">
-                                            <select name="course_id" class="form-control" id="inputCourseId">
-                                                @foreach($course_list as $course_row)
-                                                    <option value="{{$course_row->id}}" @if(old('course_id') === $course_row->id || $course->course_id === $course_row->id){{"selected"}}@endif>{{$course_row->name}}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    </div>
-                                </dd>
-                            </dl>
-
-                            <dl class="dl-horizontal">
-                                <dt class="p-t-10 form-label">lecture</dt>
-                                <dd>
-                                    <div class="fg-line">
-                                        <div class="select">
-                                            <select name="lecture_id" class="form-control" id="inputlectureId">
-                                                @foreach($lecture_list as $lecture_row)
-                                                    <option value="{{$lecture_row->id}}" @if(old('lecture_id') === $lecture_row->id ||  $course->lecture_id === $lecture_row->id){{"selected"}}@endif>{{$lecture_row->name}}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
+                                        <textarea class="form-control" name="description">{{$course->description}}</textarea>
                                     </div>
                                 </dd>
                             </dl>

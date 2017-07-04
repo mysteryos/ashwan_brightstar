@@ -31,6 +31,11 @@ class CourseController extends Controller
         $this->middleware('auth');
     }
 
+    /**
+     * GET: List of courses
+     *
+     * @return \Illuminate\View\View
+     */
     public function getList()
     {
         //Verify User Access
@@ -53,6 +58,11 @@ class CourseController extends Controller
         return $this->renderView('course.list');
     }
 
+    /**
+     * GET: View course creation form
+     *
+     * @return \Illuminate\View\View
+     */
     public function getCreate()
     {
         //Verify User Access
@@ -78,44 +88,46 @@ class CourseController extends Controller
 
         $this->addJs('/js/el/course.create.js');
         return $this->renderView('course.create');
-
-
     }
 
+    /**
+     * POST: Create Course
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function postCreate(Request $request)
     {
         //Verify User Access
         $this->verifyAccess();
 
-
-
         //Validate Data from request
         $this->validateData($request->all(),[
-            'course_id' => 'required|max:5',
             'name' => 'required|max:255',
-            'duration_months' => 'required',
-            'description' => 'required',
-
+            'duration_months' => 'required|numeric|max:12|min:1',
         ]);
 
         //Create New Course
         $course = new \App\Models\Course();
+
         //Fill in information from request
         $course->fill($request->all());
+
         //Set creator user id to user currently logged in
-        $course->creator_user_id = $this->user->id;
+        $course->creator()->associate($this->user);
 
-        //Set Course Id
-        $course->lecture_id = $request->get('lecture_id');
-
-        //Set Course Id
-        $course->course_id = $request->get('course_id');
         //Save to database
         $course->save();
 
-
+        return redirect()->action('CourseController@getView',[$course->id]);
     }
 
+    /**
+     * POST: Update course
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function postUpdate(Request $request)
     {
         //Verify User Access
@@ -123,13 +135,11 @@ class CourseController extends Controller
 
         //Validate Data from request
         $this->validateData($request->all(),[
-            'course_id' => 'required|max:5',
             'name' => 'required|max:255',
-            'duration_months' => 'required',
-            'description' => 'required',
+            'duration_months' => 'required|numeric|max:12|min:1',
         ]);
 
-        $course = \App\Models\Course::findOrFail($request->get('course_id'));
+        $course = \App\Models\Course::findOrFail($request->get('id'));
 
         //Fill in information from request
         $course->fill($request->all());
@@ -140,15 +150,14 @@ class CourseController extends Controller
         return redirect()->action('CourseController@getView',[$course->id]);
     }
 
-
+    /**
+     * GET: View course info
+     *
+     * @param int $course_id
+     * @return \Illuminate\View\View
+     */
     public function getView($course_id)
     {
-        //Verify User Access
-        $this->verifyAccess();
-
-
-
-
         $course = \App\Models\Course::findOrFail((int)$course_id);
 
         //Verify User Access
@@ -169,11 +178,4 @@ class CourseController extends Controller
 
         return $this->renderView('course.view');
     }
-
-    public function getViewStudent()
-    {
-
-    }
-
-
 }
