@@ -95,7 +95,6 @@ class BatchController extends Controller
 
         //Validate Data from request
         $this->validateData($request->all(),[
-            'id' => 'required|max:255',
             'name' => 'required|max:255',
             'start_date' => 'required|date_format:Y-m-d',
             'course_id' => 'required|exists:course,id',
@@ -116,6 +115,8 @@ class BatchController extends Controller
         $batch->course_id = $request->get('course_id');
         //Save to database
         $batch->save();
+
+        return redirect()->action('BatchController@getView',[$batch->id]);
 
     }
 
