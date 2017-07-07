@@ -66,11 +66,10 @@ return [
             'create' => [
                 'name' => 'Create',
                 'icon' => 'zmdi zmdi-plus',
-                'permission' => 'md-file-plus',
+                'permission' => 'assignment.create',
                 'href' => '/assignment/create',
                 'in url' => '/assignment/create'
                 ]
-
             ]
     ],
      'lecturer' => [

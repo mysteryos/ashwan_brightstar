@@ -91,8 +91,6 @@ class BatchController extends Controller
         //Verify User Access
         $this->verifyAccess();
 
-
-
         //Validate Data from request
         $this->validateData($request->all(),[
             'name' => 'required|max:255',
@@ -100,6 +98,13 @@ class BatchController extends Controller
             'course_id' => 'required|exists:course,id',
             'lecturer_id' => 'required|exists:lecturer,id'
         ]);
+
+        //Validate Date
+        if(Carbon::createFromFormat('Y-m-d',$request->input('start_date'))->diffIndays(Carbon::now(),false) >=0) {
+            return redirect()->back()->withInput()->withErrors([
+                'Start date must be greater than today'
+            ]);
+        }
 
         //Create New Batch
         $batch = new \App\Models\Batch();
